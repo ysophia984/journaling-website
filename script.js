@@ -1560,18 +1560,18 @@ function handleHelpFiles(files, container) {
 }
 
 // ============================================
-// Journal MBTI Test
+// Journal MBTI Test (Combined)
 // ============================================
 var mbtiAnswers = [];
 var mbtiCurrentQuestion = 0;
-var mbtiTotalQuestions = 15;
+var mbtiTotalQuestions = 24;
 
 function initMBTITest() {
     var container = document.getElementById('mbtiQuestions');
     var prevBtn = document.getElementById('mbtiPrevBtn');
     var nextBtn = document.getElementById('mbtiNextBtn');
 
-    if (!container || !mbtiQuestions) return;
+    if (!container || !testQuestions) return;
 
     // Render first question
     renderMBTIQuestion(container, 0);
@@ -1605,18 +1605,20 @@ function initMBTITest() {
 }
 
 function renderMBTIQuestion(container, index) {
-    var q = mbtiQuestions[index];
+    var q = testQuestions[index];
     var isZh = currentLang === 'zh';
 
     var html = '<div class="mbti-question-card active">';
     html += '<p class="mbti-question-text">' + (isZh ? q.question : q.questionEn) + '</p>';
     html += '<div class="mbti-options">';
-    html += '<div class="mbti-option" data-value="' + q.optionA.value + '" data-dimension="' + q.dimension + '">';
-    html += '<span>' + (isZh ? q.optionA.text : q.optionA.textEn) + '</span>';
-    html += '</div>';
-    html += '<div class="mbti-option" data-value="' + q.optionB.value + '" data-dimension="' + q.dimension + '">';
-    html += '<span>' + (isZh ? q.optionB.text : q.optionB.textEn) + '</span>';
-    html += '</div>';
+
+    // Render 3 options
+    q.options.forEach(function(opt, i) {
+        html += '<div class="mbti-option" data-value="' + opt.value + '" data-dimension="' + q.dimension + '">';
+        html += '<span>' + (isZh ? opt.text : opt.textEn) + '</span>';
+        html += '</div>';
+    });
+
     html += '</div>';
     html += '</div>';
 
@@ -1638,7 +1640,7 @@ function renderMBTIQuestion(container, index) {
     if (mbtiAnswers[index] !== undefined) {
         var options = container.querySelectorAll('.mbti-option');
         options.forEach(function(opt) {
-            if (opt.dataset.value === mbtiAnswers[index].value) {
+            if (parseInt(opt.dataset.value) === mbtiAnswers[index].value) {
                 opt.classList.add('selected');
             }
         });
@@ -1656,7 +1658,7 @@ function renderMBTIQuestion(container, index) {
             // Store answer
             mbtiAnswers[index] = {
                 dimension: this.dataset.dimension,
-                value: this.dataset.value
+                value: parseInt(this.dataset.value)
             };
         });
     });
@@ -1681,40 +1683,189 @@ function showMBTIResult() {
     questionsContainer.style.display = 'none';
 
     // Calculate result
-    var result = calculateJournalMBTI(mbtiAnswers);
+    var result = calculateTestResult(mbtiAnswers);
 
     // Fill progress to 100%
     var fill = document.getElementById('mbtiProgressFill');
     if (fill) fill.style.width = '100%';
 
-    // Render result
     var isZh = currentLang === 'zh';
     var type = result.type;
+    var tendencies = result.tendencies;
 
+    // ===== 结果头部 =====
     var html = '<div class="mbti-result-header">';
     html += '<span class="mbti-type-emoji">' + type.emoji + '</span>';
     html += '<h3 class="mbti-type-name">' + (isZh ? type.name : type.nameEn) + '</h3>';
-    html += '<span class="mbti-type-code">' + type.code + '</span>';
-    html += '<p class="mbti-type-desc">' + (isZh ? type.description : type.descriptionEn) + '</p>';
     html += '</div>';
 
-    html += '<div class="mbti-recommendations">';
-    html += '<h4>' + (isZh ? '推荐手帐类型' : 'Recommended Types') + '</h4>';
-    html += '<div class="mbti-rec-list">';
-    type.recommendations.forEach(function(rec) {
-        html += '<span class="mbti-rec-item">' + rec + '</span>';
+    // ===== 人格描述 =====
+    html += '<div class="mbti-personality-box">';
+    html += '<h4>' + (isZh ? '你的手帐人格' : 'Your Journal Personality') + '</h4>';
+    html += '<p>' + (isZh ? type.personality : type.personalityEn) + '</p>';
+    html += '<p class="mbti-desc">' + (isZh ? type.desc : type.descEn) + '</p>';
+    html += '</div>';
+
+    // ===== 维度分析可视化 =====
+    html += '<div class="mbti-dimensions-box">';
+    html += '<h4>' + (isZh ? '维度分析' : 'Dimension Analysis') + '</h4>';
+    html += '<div class="dimension-bars">';
+
+    var dimLabelsZh = {
+        RP: '记录倾向',
+        PD: '纸质偏好',
+        SB: '美观追求',
+        FS: '灵活程度',
+        AT: '注意力',
+        HB: '坚持力'
+    };
+    var dimLabelsEn = {
+        RP: 'Record Tendency',
+        PD: 'Paper Preference',
+        SB: 'Beauty Focus',
+        FS: 'Flexibility',
+        AT: 'Attention',
+        HB: 'Persistence'
+    };
+    var dimDescZh = {
+        RP: { high: '偏向记录', low: '偏向规划' },
+        PD: { high: '偏好纸质', low: '偏好数字' },
+        SB: { high: '追求美观', low: '注重实用' },
+        FS: { high: '灵活自由', low: '固定结构' },
+        AT: { high: '容易分散', low: '较为稳定' },
+        HB: { high: '难以坚持', low: '容易坚持' }
+    };
+    var dimDescEn = {
+        RP: { high: 'Record-focused', low: 'Plan-focused' },
+        PD: { high: 'Paper preference', low: 'Digital preference' },
+        SB: { high: 'Beauty-focused', low: 'Practical-focused' },
+        FS: { high: 'Flexible', low: 'Structured' },
+        AT: { high: 'Easily distracted', low: 'Stable' },
+        HB: { high: 'Hard to persist', low: 'Easy to persist' }
+    };
+
+    Object.keys(tendencies).forEach(function(dim) {
+        if (dimLabelsZh[dim]) {
+            var pct = tendencies[dim];
+            var label = isZh ? dimLabelsZh[dim] : dimLabelsEn[dim];
+            var desc = pct > 50
+                ? (isZh ? dimDescZh[dim].high : dimDescEn[dim].high)
+                : (isZh ? dimDescZh[dim].low : dimDescEn[dim].low);
+
+            html += '<div class="dimension-item">';
+            html += '<div class="dim-info">';
+            html += '<span class="dim-label">' + label + '</span>';
+            html += '<span class="dim-desc">' + desc + '</span>';
+            html += '</div>';
+            html += '<div class="dim-bar">';
+            html += '<div class="dim-fill" style="width:' + pct + '%"></div>';
+            html += '</div>';
+            html += '<span class="dim-value">' + pct + '%</span>';
+            html += '</div>';
+        }
     });
-    html += '</div>';
-    html += '</div>';
 
+    html += '</div></div>';
+
+    // ===== 行动步骤 =====
+    if (type.starter) {
+        html += '<div class="mbti-starter-box">';
+        html += '<h4>' + (isZh ? '如何开始' : 'How to Start') + '</h4>';
+
+        // 工具准备
+        html += '<div class="starter-section">';
+        html += '<span class="starter-icon">🛠️</span>';
+        html += '<div class="starter-content">';
+        html += '<span class="starter-title">' + (isZh ? '准备工具' : 'Tools to Prepare') + '</span>';
+        var tools = type.starter.tools;
+        tools.forEach(function(tool) {
+            html += '<p class="starter-item">• ' + tool + '</p>';
+        });
+        html += '</div></div>';
+
+        // 第一周
+        html += '<div class="starter-section">';
+        html += '<span class="starter-icon">📅</span>';
+        html += '<div class="starter-content">';
+        html += '<span class="starter-title">' + (isZh ? '第一周尝试' : 'First Week') + '</span>';
+        html += '<p class="starter-item">' + type.starter.firstWeek + '</p>';
+        html += '</div></div>';
+
+        // 不要做的事
+        html += '<div class="starter-section starter-dont">';
+        html += '<span class="starter-icon">⚠️</span>';
+        html += '<div class="starter-content">';
+        html += '<span class="starter-title">' + (isZh ? '避免' : 'Avoid') + '</span>';
+        var donts = type.starter.dontDo;
+        donts.forEach(function(dont) {
+            html += '<p class="starter-item">• ' + dont + '</p>';
+        });
+        html += '</div></div>';
+
+        html += '</div>';
+    }
+
+    // ===== 详细推荐 =====
+    var detailedRecs = getDetailedRecommendations(type, tendencies);
+    if (detailedRecs.length > 0) {
+        html += '<div class="mbti-detailed-rec">';
+        html += '<h4>' + (isZh ? '推荐手帐类型' : 'Recommended Types') + '</h4>';
+
+        detailedRecs.forEach(function(rec) {
+            html += '<div class="rec-card">';
+            html += '<span class="rec-icon">' + rec.icon + '</span>';
+            html += '<div class="rec-info">';
+            html += '<span class="rec-name">' + (isZh ? rec.name : rec.nameEn) + '</span>';
+            html += '<p class="rec-desc">' + (isZh ? rec.desc : rec.descEn) + '</p>';
+
+            // 使用方式选项
+            if (rec.usageOptions && rec.usageOptions.length > 0) {
+                html += '<div class="usage-options">';
+                html += '<span class="usage-label">' + (isZh ? '使用方式：' : 'Usage: ') + '</span>';
+                rec.usageOptions.forEach(function(opt) {
+                    html += '<div class="usage-option">';
+                    html += '<span class="usage-name">' + (isZh ? opt.name : opt.nameEn || opt.name) + '</span>';
+                    html += '<span class="usage-desc">' + (isZh ? opt.desc : opt.descEn || opt.desc) + '</span>';
+                    if (opt.detail) {
+                        html += '<span class="usage-detail">' + (isZh ? opt.detail : opt.detail) + '</span>';
+                    }
+                    html += '</div>';
+                });
+                html += '</div>';
+            }
+
+            // 一周模板
+            if (rec.weeklyTemplate) {
+                html += '<div class="weekly-template">';
+                html += '<span class="weekly-label">' + (isZh ? rec.weeklyTemplate.title : rec.weeklyTemplate.titleEn) + '</span>';
+                var days = rec.weeklyTemplate.days;
+                days.forEach(function(day) {
+                    html += '<div class="weekly-day">';
+                    html += '<span class="day-name">' + (isZh ? day.day : day.dayEn || day.day) + '</span>';
+                    html += '<span class="day-task">' + (isZh ? day.task : day.taskEn || day.task) + '</span>';
+                    html += '</div>';
+                });
+                if (rec.weeklyTemplate.tips) {
+                    html += '<p class="weekly-tips">💡 ' + rec.weeklyTemplate.tips + '</p>';
+                }
+                html += '</div>';
+            }
+
+            html += '</div></div>';
+        });
+
+        html += '</div>';
+    }
+
+    // ===== Tips =====
     html += '<div class="mbti-tip-box">';
     html += '<span class="tip-icon">💡</span>';
-    html += '<p>' + (isZh ? type.tips : type.tips) + '</p>';
+    html += '<p>' + type.tips + '</p>';
     html += '</div>';
 
+    // ===== 重新测试 =====
     html += '<div class="mbti-result-actions">';
     html += '<button class="btn btn-secondary" onclick="restartMBTITest()">' + (isZh ? '重新测试' : 'Restart') + '</button>';
-    html += '<a href="#planner" class="btn btn-primary">' + (isZh ? '详细规划建议' : 'Detailed Plan') + '</a>';
     html += '</div>';
 
     resultContainer.innerHTML = html;
@@ -1830,7 +1981,7 @@ function updateCalendarStats() {
     // Calculate streak
     var streak = 0;
     var today = new Date();
-    for (var i = 0; i < 30; i++) {
+    for (var i = 0; i < 365; i++) {  // 扩大到一年
         var key = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate();
         if (checkedDays[key]) {
             streak++;
@@ -1840,8 +1991,39 @@ function updateCalendarStats() {
         }
     }
 
+    // Calculate this week
+    var weekCount = 0;
+    var now = new Date();
+    var dayOfWeek = now.getDay();
+    var startOfWeek = new Date(now);
+    startOfWeek.setDate(now.getDate() - dayOfWeek);  // 周日开始
+
+    for (var i = 0; i < 7; i++) {
+        var d = new Date(startOfWeek);
+        d.setDate(startOfWeek.getDate() + i);
+        var key = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+        if (checkedDays[key]) {
+            weekCount++;
+        }
+    }
+
+    // Calculate this month
+    var monthCount = 0;
+    var currentMonth = new Date().getMonth() + 1;
+    var currentYear = new Date().getFullYear();
+
+    Object.keys(checkedDays).forEach(function(key) {
+        var parts = key.split('-');
+        if (parseInt(parts[0]) === currentYear && parseInt(parts[1]) === currentMonth) {
+            monthCount++;
+        }
+    });
+
+    // Update UI
     document.getElementById('calendarCount').textContent = count;
     document.getElementById('calendarStreak').textContent = streak;
+    document.getElementById('weekCount').textContent = weekCount;
+    document.getElementById('monthCount').textContent = monthCount;
 }
 
 // ============================================

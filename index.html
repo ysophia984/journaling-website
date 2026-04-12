@@ -16,8 +16,7 @@
         <div class="nav-container">
             <a href="#" class="nav-logo" data-i18n="logo">Sophie手帐</a>
             <ul class="nav-menu">
-                <li><a href="#mbti" data-i18n="nav.mbti">手帐人格</a></li>
-                <li><a href="#planner" data-i18n="nav.planner">手帐设计</a></li>
+                <li><a href="#mbti" data-i18n="nav.mbti">手帐人格测试</a></li>
                 <li><a href="#track" data-i18n="nav.track">今日打卡</a></li>
                 <li><a href="#resources" data-i18n="nav.resources">设计思路</a></li>
                 <li><a href="#" id="navLearnBtn" data-i18n="nav.learn">了解ADHD</a></li>
@@ -63,7 +62,6 @@
             <div class="hero-buttons">
                 <div class="hero-buttons-row">
                     <a href="#mbti" class="btn btn-primary" data-i18n="hero.mbtiBtn">测测你的手帐人格</a>
-                    <a href="#planner" class="btn btn-primary" data-i18n="hero.plannerBtn">设计适合你的手帐</a>
                 </div>
                 <div class="hero-buttons-row">
                     <button class="btn btn-secondary" id="trackingBtn" data-i18n="hero.tracking">今日打卡</button>
@@ -110,14 +108,31 @@
                         <span class="calendar-month" id="calendarMonth"></span>
                         <button class="calendar-nav-btn" id="calendarNext">→</button>
                     </div>
-                    <div class="calendar-stats">
-                        <div class="stat-item">
-                            <span class="stat-value" id="calendarCount">0</span>
-                            <span class="stat-label">天</span>
+                    <!-- 进度统计 -->
+                    <div class="progress-stats">
+                        <div class="progress-row">
+                            <div class="stat-card stat-highlight">
+                                <span class="stat-emoji">🔥</span>
+                                <span class="stat-value" id="calendarStreak">0</span>
+                                <span class="stat-label">连续天数</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-emoji">📅</span>
+                                <span class="stat-value" id="calendarCount">0</span>
+                                <span class="stat-label">累计天数</span>
+                            </div>
                         </div>
-                        <div class="stat-item">
-                            <span class="stat-value" id="calendarStreak">0</span>
-                            <span class="stat-label">连续</span>
+                        <div class="progress-row">
+                            <div class="stat-card">
+                                <span class="stat-emoji">📊</span>
+                                <span class="stat-value" id="weekCount">0</span>
+                                <span class="stat-label">本周</span>
+                            </div>
+                            <div class="stat-card">
+                                <span class="stat-emoji">📈</span>
+                                <span class="stat-value" id="monthCount">0</span>
+                                <span class="stat-label">本月</span>
+                            </div>
                         </div>
                     </div>
                     <div class="calendar-grid" id="calendarGrid"></div>
@@ -165,13 +180,13 @@
         </div>
     </div>
 
-    <!-- Journal MBTI Test Section -->
+    <!-- Combined Journal Test Section -->
     <section id="mbti" class="section mbti">
         <div class="container">
             <div class="section-header">
-                <span class="section-label" data-i18n="mbti.label">~ 手帐人格测试 ~</span>
-                <h2 class="section-title" data-i18n="mbti.title">发现你的手帐人格</h2>
-                <p class="section-subtitle" data-i18n="mbti.subtitle">15道题，测出最适合你的手帐方式</p>
+                <span class="section-label">~ 手帐人格测试 ~</span>
+                <h2 class="section-title">发现你的手帐风格</h2>
+                <p class="section-subtitle">24道题，找到最适合你的手帐方式</p>
             </div>
 
             <div class="mbti-container">
@@ -181,7 +196,7 @@
                         <div class="mbti-progress-fill" id="mbtiProgressFill"></div>
                     </div>
                     <div class="mbti-progress-text">
-                        <span id="mbtiQuestionNum">1</span> / 15
+                        <span id="mbtiQuestionNum">1</span> / 24
                     </div>
                 </div>
 
@@ -192,276 +207,13 @@
 
                 <!-- Navigation -->
                 <div class="mbti-nav" id="mbtiNav">
-                    <button class="btn btn-secondary" id="mbtiPrevBtn" disabled data-i18n="mbti.prev">← 上一题</button>
-                    <button class="btn btn-primary" id="mbtiNextBtn" data-i18n="mbti.next">下一题 →</button>
+                    <button class="btn btn-secondary" id="mbtiPrevBtn" disabled>← 上一题</button>
+                    <button class="btn btn-primary" id="mbtiNextBtn">下一题 →</button>
                 </div>
 
                 <!-- Result -->
                 <div class="mbti-result" id="mbtiResult" style="display: none;">
                     <!-- Dynamically filled -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Planner Wizard Section -->
-    <section id="planner" class="section planner">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label" data-i18n="planner.label">~ 找到你的风格 ~</span>
-                <h2 class="section-title" data-i18n="planner.title">手帐风格测试</h2>
-                <p class="section-subtitle" data-i18n="planner.subtitle">几个问题，帮你找到适合的方式</p>
-            </div>
-            <div class="wizard-container">
-                <!-- Progress Bar -->
-                <div class="wizard-progress">
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="progressFill"></div>
-                    </div>
-                    <div class="progress-steps eight-steps">
-                        <span class="progress-step active" data-step="1">1</span>
-                        <span class="progress-step" data-step="2">2</span>
-                        <span class="progress-step" data-step="3">3</span>
-                        <span class="progress-step" data-step="4">4</span>
-                        <span class="progress-step" data-step="5">5</span>
-                        <span class="progress-step" data-step="6">6</span>
-                        <span class="progress-step" data-step="7">7</span>
-                        <span class="progress-step" data-step="8">8</span>
-                    </div>
-                </div>
-                <!-- Wizard Steps -->
-                <div class="wizard-steps">
-                    <!-- Step 1: Background -->
-                    <div class="wizard-step active" id="step-1">
-                        <h3 data-i18n="planner.q1Title">你是谁？</h3>
-                        <div class="wizard-options">
-                            <button type="button" class="wizard-option" data-value="student">
-                                <span class="option-icon">📚</span>
-                                <span data-i18n="planner.bgStudent">学生</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="worker">
-                                <span class="option-icon">💼</span>
-                                <span data-i18n="planner.bgWorker">上班族</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="parent">
-                                <span class="option-icon">👩‍👧</span>
-                                <span data-i18n="planner.bgParent">宝妈/家长</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="freelancer">
-                                <span class="option-icon">🎨</span>
-                                <span data-i18n="planner.bgFreelancer">自由职业</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 2: J vs P -->
-                    <div class="wizard-step" id="step-2">
-                        <h3 data-i18n="planner.q2pjTitle">你是J还是P？</h3>
-                        <p class="wizard-hint" data-i18n="planner.q2pjHint">MBTI性格类型中的判断维度</p>
-                        <div class="wizard-options vertical">
-                            <button type="button" class="wizard-option large" data-value="J">
-                                <div class="option-icon">📋</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.jType">J型（判断型）</span>
-                                    <span class="option-desc" data-i18n="planner.jTypeDesc">喜欢计划、按规则执行、享受规律</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="P">
-                                <div class="option-icon">🌊</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.pType">P型（感知型）</span>
-                                    <span class="option-desc" data-i18n="planner.pTypeDesc">喜欢灵活、随性而行、不喜被束缚</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 3: ADHD Level -->
-                    <div class="wizard-step" id="step-3">
-                        <h3 data-i18n="planner.q3adhdTitle">你的注意力特点？</h3>
-                        <p class="wizard-hint" data-i18n="planner.q3adhdHint">ADD/ADHD倾向自评</p>
-                        <div class="wizard-options vertical">
-                            <button type="button" class="wizard-option large" data-value="none">
-                                <div class="option-icon">🎯</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.adhdNone">无明显倾向</span>
-                                    <span class="option-desc" data-i18n="planner.adhdNoneDesc">注意力较稳定，计划能正常执行</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="mild">
-                                <div class="option-icon">🤔</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.adhdMild">轻微倾向</span>
-                                    <span class="option-desc" data-i18n="planner.adhdMildDesc">偶尔分心、忘记任务、时间感模糊</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="significant">
-                                <div class="option-icon">💫</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.adhdSignificant">明显倾向</span>
-                                    <span class="option-desc" data-i18n="planner.adhdSignificantDesc">经常分心/超聚焦、时间感很模糊</span>
-                                </div>
-                                <div class="option-tag recommended" data-i18n="planner.recommended">推荐</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 4: Goals (multi-select) -->
-                    <div class="wizard-step" id="step-4">
-                        <h3 data-i18n="planner.q4Title">你想用手帐做什么？</h3>
-                        <p class="wizard-hint" data-i18n="planner.q4Hint">可多选</p>
-                        <div class="wizard-options multi-select">
-                            <button type="button" class="wizard-option" data-value="tasks">
-                                <span class="option-icon">✅</span>
-                                <span data-i18n="planner.goalTasks">管理任务</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="time">
-                                <span class="option-icon">⏰</span>
-                                <span data-i18n="planner.goalTime">记录时间</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="habits">
-                                <span class="option-icon">📊</span>
-                                <span data-i18n="planner.goalHabits">追踪习惯</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="feelings">
-                                <span class="option-icon">💭</span>
-                                <span data-i18n="planner.goalFeelings">记录感受</span>
-                            </button>
-                            <button type="button" class="wizard-option" data-value="reading">
-                                <span class="option-icon">📖</span>
-                                <span data-i18n="planner.goalReading">读书/观影记录</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 5: Paper vs Digital -->
-                    <div class="wizard-step" id="step-5">
-                        <h3 data-i18n="planner.q5Title">纸质还是数字？</h3>
-                        <div class="wizard-options">
-                            <button type="button" class="wizard-option large" data-value="paper">
-                                <div class="option-icon">📔</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.mediumPaper">纸质手帐</span>
-                                    <span class="option-desc" data-i18n="planner.mediumPaperDesc">手写触感、实体收藏、可自由排版</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="digital">
-                                <div class="option-icon">📱</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.mediumDigital">数字手帐</span>
-                                    <span class="option-desc" data-i18n="planner.mediumDigitalDesc">随时记录、方便修改、多设备同步</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 6: Flexibility -->
-                    <div class="wizard-step" id="step-6">
-                        <h3 data-i18n="planner.q6Title">计划会经常改变吗？</h3>
-                        <p class="wizard-hint" data-i18n="planner.q6Hint">灵活性程度</p>
-                        <div class="wizard-options vertical">
-                            <button type="button" class="wizard-option large" data-value="never">
-                                <div class="option-icon">📌</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.flexNever">基本不变</span>
-                                    <span class="option-desc" data-i18n="planner.flexNeverDesc">计划制定后基本能按计划执行</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="occasional">
-                                <div class="option-icon">🔄</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.flexOccasional">偶尔小变</span>
-                                    <span class="option-desc" data-i18n="planner.flexOccasionalDesc">计划有时需要微调</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="frequent">
-                                <div class="option-icon">🌊</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.flexFrequent">常有小变</span>
-                                    <span class="option-desc" data-i18n="planner.flexFrequentDesc">计划经常会调整，但大方向不变</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="very-frequent">
-                                <div class="option-icon">🌪️</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.flexVeryFrequent">经常大变</span>
-                                    <span class="option-desc" data-i18n="planner.flexVeryFrequentDesc">计划几乎没法提前定，随性为主</span>
-                                </div>
-                                <div class="option-tag tip" data-i18n="planner.flexVeryFrequentTip">💡 这种情况建议手机App</div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 7: Layout Compactness -->
-                    <div class="wizard-step" id="step-7">
-                        <h3 data-i18n="planner.q7Title">排版偏好？</h3>
-                        <div class="wizard-options">
-                            <button type="button" class="wizard-option large" data-value="compact">
-                                <div class="option-icon">📦</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.layoutCompact">紧凑型</span>
-                                    <span class="option-desc" data-i18n="planner.layoutCompactDesc">一页多内容、信息密集、实用</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="spacious">
-                                <div class="option-icon">🌸</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.layoutSpacious">宽松型</span>
-                                    <span class="option-desc" data-i18n="planner.layoutSpaciousDesc">留白多、可装饰、美观</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Step 8: Multi-record -->
-                    <div class="wizard-step" id="step-8">
-                        <h3 data-i18n="planner.q8Title">同时记录几件事？</h3>
-                        <p class="wizard-hint" data-i18n="planner.q8Hint">一天内想记录的内容数量</p>
-                        <div class="wizard-options">
-                            <button type="button" class="wizard-option large" data-value="one">
-                                <div class="option-icon">🎯</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.multiOne">一件事</span>
-                                    <span class="option-desc" data-i18n="planner.multiOneDesc">专注记录最重要的事</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="few">
-                                <div class="option-icon">📝</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.multiFew">几件事</span>
-                                    <span class="option-desc" data-i18n="planner.multiFewDesc">2-5件事，常见情况</span>
-                                </div>
-                            </button>
-                            <button type="button" class="wizard-option large" data-value="many">
-                                <div class="option-icon">📋</div>
-                                <div class="option-content">
-                                    <span class="option-title" data-i18n="planner.multiMany">很多事</span>
-                                    <span class="option-desc" data-i18n="planner.multiManyDesc">喜欢记录每件小事和细节</span>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Result Step -->
-                    <div class="wizard-step result" id="step-result">
-                        <h3 data-i18n="planner.resultTitle">适合你的手帐类型</h3>
-                        <div class="result-types" id="resultTypes">
-                            <!-- Dynamically filled with simple type cards -->
-                        </div>
-                        <div class="result-note" data-i18n="planner.resultNote">
-                            <p>💡 你可以组合2-3种类型使用</p>
-                            <p>截图和图片可以自己添加到相应位置</p>
-                        </div>
-                        <div class="result-actions">
-                            <button class="btn btn-secondary" id="restartWizard" data-i18n="planner.restart">重新测试</button>
-                            <a href="#contact" class="btn btn-primary" data-i18n="planner.getHelp">需要帮助？联系我</a>
-                        </div>
-                    </div>
-                </div>
-                <!-- Navigation Buttons -->
-                <div class="wizard-nav">
-                    <button class="wizard-btn prev" id="prevBtn" data-i18n="planner.prev" disabled>← 上一步</button>
-                    <button class="wizard-btn next" id="nextBtn" data-i18n="planner.next">下一步 →</button>
                 </div>
             </div>
         </div>
@@ -476,18 +228,18 @@
                     <h2 class="section-title" data-i18n="contact.title">一起探索手帐</h2>
                     <p data-i18n="contact.intro">想定制专属手帐系统？有问题想聊？欢迎联系我。</p>
                     <div class="contact-methods">
-                        <div class="contact-method">
+                        <a href="https://www.xiaohongshu.com/user/profile/801829421" target="_blank" rel="noopener" class="contact-method">
                             <span class="contact-icon">📕</span>
                             <span>小红书: 801829421</span>
-                        </div>
-                        <div class="contact-method">
+                        </a>
+                        <a href="https://instagram.com/sophie.journal" target="_blank" rel="noopener" class="contact-method">
                             <span class="contact-icon">📸</span>
                             <span>Instagram: sophie.journal</span>
-                        </div>
-                        <div class="contact-method">
+                        </a>
+                        <a href="mailto:741808831@qq.com" class="contact-method">
                             <span class="contact-icon">📧</span>
                             <span>741808831@qq.com</span>
-                        </div>
+                        </a>
                     </div>
                 </div>
                 <form class="contact-form" action="#" method="POST">
@@ -609,9 +361,7 @@
             </div>
             <div class="about-content">
                 <div class="about-image">
-                    <div class="about-image-placeholder">
-                        <span data-i18n="about.photoPlaceholder">你的照片</span>
-                    </div>
+                    <img src="images/my-photo.JPG" alt="Sophie" class="about-photo">
                     <div class="about-decoration"></div>
                 </div>
                 <div class="about-text">
@@ -654,7 +404,7 @@
     <script src="tips-data.js"></script>
     <script src="colors-data.js"></script>
     <script src="qa-data.js"></script>
-    <script src="mbti-data.js"></script>
+    <script src="combined-test-data.js"></script>
     <script src="script.js"></script>
 
     <!-- 猫咪提示系统 - Emoji版本 -->
