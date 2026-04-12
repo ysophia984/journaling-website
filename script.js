@@ -1308,150 +1308,191 @@ function showColorQuizResult(style, container) {
 // ============================================
 // Art Styles Display
 // ============================================
+// ============================================
+// Color Palette Tool (Expanded)
+// ============================================
+var currentPaletteCategory = 'all';
+var currentScheme = 'complementary';
+
 function initArtStyles() {
-    var artStylesGrid = document.getElementById('artStylesGrid');
-
-    if (!artStylesGrid) return;
-
-    var artStyles = [
-        { name: '印象派', colors: ['#4A90A4', '#F5DEB3', '#C9A66B'], desc: '莫奈、梵高的柔和色调' },
-        { name: '巴洛克', colors: ['#8B4513', '#DAA520', '#800020'], desc: '深沉华丽的宫廷风格' },
-        { name: '极简主义', colors: ['#FFFFFF', '#333333', '#CCCCCC'], desc: '黑白灰的现代美学' },
-        { name: '日式和风', colors: ['#E8D4C4', '#D4AF37', '#8FBC8F'], desc: '淡雅禅意的自然色系' },
-        { name: '复古风', colors: ['#CD853F', '#DEB887', '#704214'], desc: '怀旧温暖的色调' },
-        { name: '莫兰迪色', colors: ['#9C8E7C', '#B5A99A', '#7D6B5D'], desc: '低饱和度的灰调色系' }
-    ];
-
-    var html = '';
-    artStyles.forEach(function(style) {
-        html += '<div class="art-style-card">';
-        html += '<div class="art-style-name">' + style.name + '</div>';
-        html += '<div class="art-style-colors">';
-        style.colors.forEach(function(c) {
-            html += '<div class="art-color" style="background:' + c + ';" title="' + c + '"></div>';
-        });
-        html += '</div>';
-        html += '<div class="art-style-desc">' + style.desc + '</div>';
-        html += '</div>';
-    });
-
-    artStylesGrid.innerHTML = html;
-
-    // Click to copy color
-    artStylesGrid.querySelectorAll('.art-color').forEach(function(color) {
-        color.addEventListener('click', function() {
-            var hex = this.title;
-            navigator.clipboard.writeText(hex).then(function() {
-                alert('已复制: ' + hex);
-            });
-        });
-    });
+    initPaletteTool();
 }
 
-// ============================================
-// Color Palette Tool
-// ============================================
-function initColorPalette() {
-    var generateBtn = document.getElementById('generatePaletteBtn');
-    var colorPicker = document.getElementById('baseColorPicker');
-    var generatedPalette = document.getElementById('generatedPalette');
-    var palettesGrid = document.getElementById('palettesGrid');
+function initPaletteTool() {
+    // Check if elements exist
+    var categoryTabsContainer = document.getElementById('paletteCategoryTabs');
+    var presetGrid = document.getElementById('presetPaletteGrid');
+    var baseColorPicker = document.getElementById('baseColorPicker');
+    var baseColorHex = document.getElementById('baseColorHex');
+    var schemeOptionsContainer = document.getElementById('schemeOptions');
+    var generatedPaletteContainer = document.getElementById('generatedPalette');
 
-    if (!presetPalettes || !palettesGrid) return;
+    if (!presetGrid || !presetPalettes) return;
+
+    // Initialize category tabs
+    if (categoryTabsContainer) {
+        renderCategoryTabs(categoryTabsContainer);
+    }
 
     // Render preset palettes
-    renderPresetPalettes(palettesGrid);
+    renderPresetPalettes(presetGrid);
 
-    // Generate palette button
-    if (generateBtn && colorPicker && generatedPalette) {
-        generateBtn.addEventListener('click', function() {
-            var baseColor = colorPicker.value;
-            var colors = generatePalette(baseColor);
-            if (colors) {
-                renderGeneratedPalette(generatedPalette, colors);
-            }
+    // Initialize color picker
+    if (baseColorPicker && baseColorHex) {
+        baseColorPicker.addEventListener('input', function() {
+            baseColorHex.textContent = this.value.toUpperCase();
+            updateGeneratedPalette();
         });
-
-        // Initial generation
-        var colors = generatePalette(colorPicker.value);
-        if (colors) {
-            renderGeneratedPalette(generatedPalette, colors);
-        }
     }
+
+    // Initialize scheme options
+    if (schemeOptionsContainer) {
+        renderSchemeOptions(schemeOptionsContainer);
+    }
+
+    // Initial generated palette
+    updateGeneratedPalette();
 }
 
-function renderGeneratedPalette(container, colors) {
-    var html = '';
-    colors.forEach(function(color) {
-        html += '<div class="color-swatch" data-hex="' + color.hex + '">';
-        html += '<div class="color-box" style="background-color: ' + color.hex + '"></div>';
-        html += '<div class="color-info">';
-        html += '<span class="color-hex">' + color.hex + '</span>';
-        html += '<span class="color-name">' + color.name + '</span>';
-        html += '<span class="color-copied">已复制!</span>';
-        html += '</div>';
-        html += '</div>';
+function renderCategoryTabs(container) {
+    var html = '<button class="palette-category-tab active" data-category="all">全部</button>';
+    styleCategories.forEach(function(cat) {
+        html += '<button class="palette-category-tab" data-category="' + cat.name + '">' + cat.icon + ' ' + cat.name + '</button>';
     });
     container.innerHTML = html;
 
-    // Add click to copy
-    container.querySelectorAll('.color-swatch').forEach(function(swatch) {
-        swatch.addEventListener('click', function() {
-            var hex = this.dataset.hex;
-            copyToClipboard(hex, this);
+    // Add click handlers
+    container.querySelectorAll('.palette-category-tab').forEach(function(tab) {
+        tab.addEventListener('click', function() {
+            currentPaletteCategory = this.dataset.category;
+            container.querySelectorAll('.palette-category-tab').forEach(function(t) { t.classList.remove('active'); });
+            this.classList.add('active');
+            renderPresetPalettes(document.getElementById('presetPaletteGrid'));
         });
     });
 }
 
 function renderPresetPalettes(container) {
+    var filteredPalettes = presetPalettes;
+    if (currentPaletteCategory !== 'all') {
+        filteredPalettes = presetPalettes.filter(function(p) {
+            return p.category === currentPaletteCategory;
+        });
+    }
+
     var html = '';
-    presetPalettes.forEach(function(palette) {
+    filteredPalettes.forEach(function(palette) {
         html += '<div class="palette-card">';
-        html += '<div class="palette-header">';
-        html += '<span class="palette-name">' + palette.name + '</span>';
-        html += '<span class="palette-name-en">' + palette.nameEn + '</span>';
-        html += '</div>';
-        html += '<p class="palette-desc">' + palette.description + '</p>';
-        html += '<div class="palette-colors">';
+        html += '<div class="palette-card-name">' + palette.name + '</div>';
+        html += '<div class="palette-card-desc">' + palette.description + '</div>';
+        html += '<div class="palette-colors-display">';
         palette.colors.forEach(function(color) {
-            html += '<div class="palette-color" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '" title="' + color.name + '"></div>';
+            html += '<div class="palette-color-block" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '" data-name="' + color.name + '"></div>';
         });
         html += '</div>';
         html += '</div>';
     });
     container.innerHTML = html;
 
-    // Add click to copy
-    container.querySelectorAll('.palette-color').forEach(function(colorBox) {
-        colorBox.addEventListener('click', function() {
+    // Add click handlers to copy colors
+    container.querySelectorAll('.palette-color-block').forEach(function(block) {
+        block.addEventListener('click', function() {
             var hex = this.dataset.hex;
-            copyToClipboard(hex);
-            showNotification(currentLang === 'zh' ? '颜色 ' + hex + ' 已复制!' : 'Color ' + hex + ' copied!');
+            var name = this.dataset.name;
+            copyColor(hex, name);
         });
     });
 }
 
-function copyToClipboard(text, element) {
+function renderSchemeOptions(container) {
+    var schemes = [
+        { id: 'monochromatic', name: '同色系' },
+        { id: 'complementary', name: '互补色' },
+        { id: 'analogous', name: '邻近色' },
+        { id: 'triadic', name: '三角色' },
+        { id: 'splitComplementary', name: '分裂互补' },
+        { id: 'tetradic', name: '四角色' },
+        { id: 'warm', name: '暖色调' },
+        { id: 'cool', name: '冷色调' },
+        { id: 'pastel', name: '粉彩色' }
+    ];
+
+    var html = '';
+    schemes.forEach(function(scheme) {
+        var activeClass = scheme.id === currentScheme ? ' active' : '';
+        html += '<button class="scheme-option' + activeClass + '" data-scheme="' + scheme.id + '">' + scheme.name + '</button>';
+    });
+    container.innerHTML = html;
+
+    // Add click handlers
+    container.querySelectorAll('.scheme-option').forEach(function(option) {
+        option.addEventListener('click', function() {
+            currentScheme = this.dataset.scheme;
+            container.querySelectorAll('.scheme-option').forEach(function(o) { o.classList.remove('active'); });
+            this.classList.add('active');
+            updateGeneratedPalette();
+        });
+    });
+}
+
+function updateGeneratedPalette() {
+    var baseColorPicker = document.getElementById('baseColorPicker');
+    var generatedPaletteContainer = document.getElementById('generatedPalette');
+
+    if (!baseColorPicker || !generatedPaletteContainer) return;
+
+    var baseHex = baseColorPicker.value;
+    var colors = generatePaletteFromBase(baseHex, currentScheme);
+
+    if (!colors) return;
+
+    var html = '';
+    colors.forEach(function(color) {
+        html += '<div class="generated-color">';
+        html += '<div class="generated-color-block" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '"></div>';
+        html += '<span class="generated-color-name">' + color.name + '</span>';
+        html += '<span class="generated-color-hex">' + color.hex + '</span>';
+        html += '</div>';
+    });
+    generatedPaletteContainer.innerHTML = html;
+
+    // Add click handlers
+    generatedPaletteContainer.querySelectorAll('.generated-color-block').forEach(function(block) {
+        block.addEventListener('click', function() {
+            var hex = this.dataset.hex;
+            copyColor(hex, hex);
+        });
+    });
+}
+
+function copyColor(hex, name) {
     if (navigator.clipboard) {
-        navigator.clipboard.writeText(text).then(function() {
-            if (element) {
-                element.classList.add('copied');
-                setTimeout(function() { element.classList.remove('copied'); }, 1500);
-            }
+        navigator.clipboard.writeText(hex).then(function() {
+            showCopyTooltip('已复制: ' + hex);
         });
     } else {
-        // Fallback for older browsers
         var textarea = document.createElement('textarea');
-        textarea.value = text;
+        textarea.value = hex;
         document.body.appendChild(textarea);
         textarea.select();
         document.execCommand('copy');
         document.body.removeChild(textarea);
-        if (element) {
-            element.classList.add('copied');
-            setTimeout(function() { element.classList.remove('copied'); }, 1500);
-        }
+        showCopyTooltip('已复制: ' + hex);
     }
+}
+
+function showCopyTooltip(message) {
+    var tooltip = document.querySelector('.copy-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'copy-tooltip';
+        document.body.appendChild(tooltip);
+    }
+    tooltip.textContent = message;
+    tooltip.classList.add('show');
+    setTimeout(function() {
+        tooltip.classList.remove('show');
+    }, 1500);
 }
 
 // ============================================
@@ -1564,7 +1605,7 @@ function handleHelpFiles(files, container) {
 // ============================================
 var mbtiAnswers = [];
 var mbtiCurrentQuestion = 0;
-var mbtiTotalQuestions = 24;
+var mbtiTotalQuestions = 27;
 
 function initMBTITest() {
     var container = document.getElementById('mbtiQuestions');
@@ -1609,12 +1650,18 @@ function renderMBTIQuestion(container, index) {
     var isZh = currentLang === 'zh';
 
     var html = '<div class="mbti-question-card active">';
+
+    // Add plus indicator for color style questions
+    if (q.isPlus) {
+        html += '<span class="mbti-plus-badge">' + (isZh ? '✨ 加分项' : '✨ Bonus') + '</span>';
+    }
+
     html += '<p class="mbti-question-text">' + (isZh ? q.question : q.questionEn) + '</p>';
     html += '<div class="mbti-options">';
 
     // Render 3 options
     q.options.forEach(function(opt, i) {
-        html += '<div class="mbti-option" data-value="' + opt.value + '" data-dimension="' + q.dimension + '">';
+        html += '<div class="mbti-option" data-value="' + opt.value + '" data-dimension="' + q.dimension + '" data-is-plus="' + (q.isPlus ? 'true' : 'false') + '">';
         html += '<span>' + (isZh ? opt.text : opt.textEn) + '</span>';
         html += '</div>';
     });
@@ -1639,8 +1686,10 @@ function renderMBTIQuestion(container, index) {
     // Mark previously selected answer
     if (mbtiAnswers[index] !== undefined) {
         var options = container.querySelectorAll('.mbti-option');
+        var storedAnswer = mbtiAnswers[index];
         options.forEach(function(opt) {
-            if (parseInt(opt.dataset.value) === mbtiAnswers[index].value) {
+            var optValue = opt.dataset.isPlus === 'true' ? opt.dataset.value : parseInt(opt.dataset.value);
+            if (optValue === storedAnswer.value) {
                 opt.classList.add('selected');
             }
         });
@@ -1655,10 +1704,15 @@ function renderMBTIQuestion(container, index) {
             });
             this.classList.add('selected');
 
-            // Store answer
+            // Store answer - handle both numeric and string values
+            var isPlus = this.dataset.isPlus === 'true';
+            var value = isPlus ? this.dataset.value : parseInt(this.dataset.value);
+
             mbtiAnswers[index] = {
+                questionId: q.id,
                 dimension: this.dataset.dimension,
-                value: parseInt(this.dataset.value)
+                value: value,
+                isPlus: isPlus
             };
         });
     });
@@ -1863,6 +1917,24 @@ function showMBTIResult() {
     html += '<p>' + type.tips + '</p>';
     html += '</div>';
 
+    // ===== 人格底色推荐 (Plus维度) =====
+    var colorRecommendation = getColorRecommendation(mbtiAnswers);
+    if (colorRecommendation) {
+        html += '<div class="mbti-color-box">';
+        html += '<h4>' + (isZh ? '✨ 你的人格底色' : '✨ Your Personality Color') + '</h4>';
+        html += '<p class="color-reason">' + (isZh ? colorRecommendation.reason : colorRecommendation.reasonEn) + '</p>';
+        html += '<div class="color-palette-preview">';
+        colorRecommendation.palette.colors.forEach(function(color) {
+            html += '<div class="color-preview-block" style="background-color: ' + color.hex + '" title="' + color.name + '">';
+            html += '<span class="color-hex-label">' + color.hex + '</span>';
+            html += '</div>';
+        });
+        html += '</div>';
+        html += '<p class="color-palette-name">' + (isZh ? colorRecommendation.palette.name : colorRecommendation.palette.nameEn) + '</p>';
+        html += '<p class="color-tip">' + (isZh ? '点击调色盘工具可以复制颜色代码' : 'Click palette tool to copy color codes') + '</p>';
+        html += '</div>';
+    }
+
     // ===== 重新测试 =====
     html += '<div class="mbti-result-actions">';
     html += '<button class="btn btn-secondary" onclick="restartMBTITest()">' + (isZh ? '重新测试' : 'Restart') + '</button>';
@@ -1886,6 +1958,57 @@ function restartMBTITest() {
 
     renderMBTIQuestion(questionsContainer, 0);
     updateMBTIProgress();
+}
+
+// 获取颜色推荐（基于Plus维度的答案）
+function getColorRecommendation(answers) {
+    // 只分析Plus维度的问题（id: 25, 26, 27）
+    var colorAnswers = answers.filter(function(a) {
+        return a.questionId >= 25 && a.questionId <= 27;
+    });
+
+    if (colorAnswers.length === 0) return null;
+
+    // 收集颜色风格偏好
+    var preferences = [];
+    colorAnswers.forEach(function(a) {
+        if (typeof a.value === 'string') {
+            preferences.push(a.value);
+        }
+    });
+
+    // 根据偏好匹配调色盘
+    var matchedPalettes = [];
+    preferences.forEach(function(pref) {
+        presetPalettes.forEach(function(palette) {
+            if (palette.category === pref) {
+                matchedPalettes.push(palette);
+            }
+        });
+    });
+
+    // 如果没有匹配，根据人格类型推荐默认调色盘
+    if (matchedPalettes.length === 0) {
+        // 使用第一个偏好或默认温柔系
+        var defaultCategory = preferences[0] || '温柔';
+        matchedPalettes = presetPalettes.filter(function(p) {
+            return p.category === defaultCategory;
+        });
+    }
+
+    // 选择第一个匹配的调色盘
+    var selectedPalette = matchedPalettes[0] || presetPalettes[0];
+
+    // 构建推荐理由
+    var reasonText = '根据你对「' + preferences.join('、') + '」风格的偏好';
+    var reasonTextEn = 'Based on your preference for "' + preferences.join(', ') + '" style';
+
+    return {
+        palette: selectedPalette,
+        preferences: preferences,
+        reason: reasonText,
+        reasonEn: reasonTextEn
+    };
 }
 
 // ============================================

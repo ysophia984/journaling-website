@@ -271,30 +271,36 @@
             </div>
 
             <div class="collapsible-cards">
-                <!-- 配色工具 (艺术风格分类) -->
+                <!-- 配色工具 (调色盘工具) -->
                 <div class="collapsible-card">
                     <button class="collapsible-header" onclick="toggleCollapsible(this)">
                         <span class="card-icon">🎨</span>
-                        <span class="card-title" data-i18n="resources.colors">配色灵感</span>
+                        <span class="card-title" data-i18n="resources.colors">调色盘</span>
                         <span class="card-toggle">▼</span>
                     </button>
                     <div class="collapsible-content">
-                        <!-- 艺术风格小问卷 -->
-                        <div class="color-quiz">
-                            <p class="quiz-title" data-i18n="color.quizTitle">你喜欢什么风格的颜色？</p>
-                            <div class="quiz-options">
-                                <button class="quiz-option" data-style="impressionist">印象派</button>
-                                <button class="quiz-option" data-style="baroque">巴洛克</button>
-                                <button class="quiz-option" data-style="minimalist">极简主义</button>
-                                <button class="quiz-option" data-style="japanese">日式和风</button>
-                                <button class="quiz-option" data-style="vintage">复古风</button>
-                            </div>
-                            <div class="quiz-result" id="colorQuizResult"></div>
+                        <!-- 预设配色库 -->
+                        <div class="palette-tool-section">
+                            <h4 class="palette-section-title">预设配色库</h4>
+                            <div class="palette-category-tabs" id="paletteCategoryTabs"></div>
+                            <div class="palette-grid" id="presetPaletteGrid"></div>
                         </div>
-                        <!-- 艺术风格色系 -->
-                        <div class="art-styles-section">
-                            <p data-i18n="color.stylesTitle">经典艺术风格色系</p>
-                            <div class="art-styles-grid" id="artStylesGrid"></div>
+
+                        <!-- 自定义配色生成器 -->
+                        <div class="palette-tool-section">
+                            <h4 class="palette-section-title">自定义配色生成</h4>
+                            <div class="color-generator">
+                                <div class="color-picker-row">
+                                    <label>选择主色：</label>
+                                    <input type="color" id="baseColorPicker" value="#7c6a9a" class="color-picker-input">
+                                    <span class="color-hex-display" id="baseColorHex">#7c6a9a</span>
+                                </div>
+                                <div class="scheme-selector">
+                                    <label>配色方案：</label>
+                                    <div class="scheme-options" id="schemeOptions"></div>
+                                </div>
+                                <div class="generated-palette" id="generatedPalette"></div>
+                            </div>
                         </div>
                     </div>
                 </div>

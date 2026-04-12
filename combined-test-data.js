@@ -11,7 +11,8 @@ var testDimensions = {
     FS: { name: "灵活 vs 结构", nameEn: "Flexible vs Structured", description: "你喜欢随心所欲，还是按固定格式？" },
     IS: { name: "独立 vs 社交", nameEn: "Individual vs Social", description: "你喜欢自己写，还是分享给别人看？" },
     AT: { name: "注意力特点", nameEn: "Attention Style", description: "你的注意力稳定还是容易分散？" },
-    HB: { name: "习惯坚持", nameEn: "Habit Persistence", description: "你能坚持做一件事吗？" }
+    HB: { name: "习惯坚持", nameEn: "Habit Persistence", description: "你能坚持做一件事吗？" },
+    CS: { name: "颜色风格", nameEn: "Color Style", description: "你的颜色和风格偏好（加分项）", isPlus: true }
 };
 
 // 测试问题 - 合并版本，每题3个选项
@@ -291,6 +292,44 @@ var testQuestions = [
             { value: 3, text: "不太有信心，容易放弃", textEn: "Not confident, easily give up" },
             { value: 2, text: "还行，看情况", textEn: "Okay, depends" },
             { value: 1, text: "有信心，能坚持到底", textEn: "Confident, can stick to it" }
+        ]
+    },
+
+    // ===== Plus维度：颜色风格偏好 =====
+    {
+        id: 25,
+        dimension: "CS",
+        isPlus: true,
+        question: "你更喜欢什么样的颜色感觉？",
+        questionEn: "What color feeling do you prefer?",
+        options: [
+            { value: "温柔", text: "温柔淡雅，像奶茶色、奶油色", textEn: "Soft and gentle, like milk tea or cream" },
+            { value: "活力", text: "明亮活泼，像彩虹色、日落色", textEn: "Bright and lively, like rainbow or sunset" },
+            { value: "复古", text: "怀旧深沉，像老照片、胶片色", textEn: "Vintage and deep, like sepia or film" }
+        ]
+    },
+    {
+        id: 26,
+        dimension: "CS",
+        isPlus: true,
+        question: "你的手帐风格理想是？",
+        questionEn: "Your ideal journal style?",
+        options: [
+            { value: "极简", text: "简洁干净，黑白灰", textEn: "Minimalist, clean black white grey" },
+            { value: "艺术", text: "创意自由，像水彩、油画", textEn: "Artistic freedom, like watercolor or oil painting" },
+            { value: "自然", text: "自然沉稳，像森林、海洋", textEn: "Natural and calm, like forest or ocean" }
+        ]
+    },
+    {
+        id: 27,
+        dimension: "CS",
+        isPlus: true,
+        question: "如果选一个代表你的「人格底色」？",
+        questionEn: "If you choose a 'base color' representing you?",
+        options: [
+            { value: "优雅", text: "优雅内敛，莫兰迪色系", textEn: "Elegant and restrained, Morandi colors" },
+            { value: "东方", text: "东方韵味，水墨和风", textEn: "Eastern charm, ink wash or Japanese style" },
+            { value: "现代", text: "现代前卫，赛博渐变", textEn: "Modern and avant-garde, cyber or gradient" }
         ]
     }
 ];
