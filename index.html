@@ -11,43 +11,53 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Navigation Overlay for Mobile -->
+    <div class="nav-overlay" id="navOverlay"></div>
+
     <!-- Navigation -->
     <nav class="navbar">
         <div class="nav-container">
             <a href="#" class="nav-logo" data-i18n="logo">Sophie手帐</a>
-            <ul class="nav-menu">
-                <li><a href="#mbti" data-i18n="nav.mbti">手帐人格测试</a></li>
-                <li><a href="#track" data-i18n="nav.track">今日打卡</a></li>
-                <li><a href="#resources" data-i18n="nav.resources">设计思路</a></li>
-                <li><a href="#" id="navLearnBtn" data-i18n="nav.learn">了解ADHD</a></li>
-                <li><a href="#about" data-i18n="nav.about">我的故事</a></li>
-                <li><a href="#qa" data-i18n="nav.qa">常见问题</a></li>
-            </ul>
-            <div class="nav-controls">
-                <button class="cat-toggle-btn" id="catToggleBtn" title="猫咪出没">
-                    <span class="cat-icon">🐱</span>
-                </button>
-                <button class="cat-toggle-btn idea-box-btn" id="ideaBoxBtn" title="灵感收集箱">
-                    <span class="idea-icon">💡</span>
-                </button>
-                <div class="lang-selector">
-                    <button class="lang-btn" aria-label="Select language">
-                        <span class="lang-current">CN</span>
-                        <svg class="lang-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <path d="M6 9l6 6 6-6"/>
-                        </svg>
-                    </button>
-                    <ul class="lang-dropdown">
-                        <li class="lang-option main-lang selected" data-lang="zh"><span class="lang-flag">🇨🇳</span> 中文</li>
-                        <li class="lang-option main-lang" data-lang="en"><span class="lang-flag">🇺🇸</span> English</li>
-                    </ul>
+            <div class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="#mbti" data-i18n="nav.mbti">手帐人格</a></li>
+                    <li><a href="#track" data-i18n="nav.track">今日打卡</a></li>
+                    <li><a href="#colors" data-i18n="nav.colors">配色灵感</a></li>
+                    <li><a href="#resources" data-i18n="nav.resources">素材库</a></li>
+                    <li><a href="#" id="navLearnBtn" data-i18n="nav.learn">了解ADHD</a></li>
+                    <li><a href="#about" data-i18n="nav.about">我的故事</a></li>
+                    <li><a href="#qa" data-i18n="nav.qa">常见问题</a></li>
+                    <li><a href="#contact" data-i18n="nav.contact">联系我</a></li>
+                </ul>
+                <div class="nav-controls">
+                    <div class="nav-controls-inner">
+                        <button class="cat-toggle-btn" id="catToggleBtn" title="猫咪出没">
+                            <span class="cat-icon">🐱</span>
+                        </button>
+                        <button class="cat-toggle-btn idea-box-btn" id="ideaBoxBtn" title="灵感收集箱">
+                            <span class="idea-icon">💡</span>
+                        </button>
+                        <div class="lang-selector">
+                            <button class="lang-btn" aria-label="Select language">
+                                <span class="lang-current">CN</span>
+                                <svg class="lang-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9l6 6 6-6"/>
+                                </svg>
+                            </button>
+                            <ul class="lang-dropdown">
+                                <li class="lang-option main-lang selected" data-lang="zh"><span class="lang-flag">🇨🇳</span> 中文</li>
+                                <li class="lang-option main-lang" data-lang="tw"><span class="lang-flag">🇹🇼</span> 繁體</li>
+                                <li class="lang-option main-lang" data-lang="en"><span class="lang-flag">🇺🇸</span> English</li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
-                <button class="nav-toggle" aria-label="Toggle navigation">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </button>
             </div>
+            <button class="nav-toggle" id="navToggle" aria-label="Toggle navigation">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
         </div>
     </nav>
 
@@ -63,12 +73,13 @@
                 <div class="hero-buttons-row">
                     <a href="#mbti" class="btn btn-primary" data-i18n="hero.mbtiBtn">测测你的手帐人格</a>
                 </div>
-                <div class="hero-buttons-row">
-                    <button class="btn btn-secondary" id="trackingBtn" data-i18n="hero.tracking">今日打卡</button>
-                    <a href="#resources" class="btn btn-secondary" data-i18n="hero.resourcesBtn">设计思路</a>
-                    <button class="btn btn-secondary" id="learnMoreBtn" data-i18n="hero.learnMore">了解ADHD</button>
-                    <a href="#about" class="btn btn-secondary" data-i18n="hero.aboutBtn">我的故事</a>
-                </div>
+            </div>
+            <!-- Desktop preview -->
+            <div class="hero-preview">
+                <a href="#track" class="preview-item clickable">📅 打卡追踪</a>
+                <a href="#colors" class="preview-item clickable">🎨 配色工具</a>
+                <a href="#resources" class="preview-item clickable">💡 设计思路</a>
+                <a href="#about" class="preview-item clickable">📖 我的故事</a>
             </div>
         </div>
         <div class="scroll-indicator">
@@ -77,7 +88,85 @@
         </div>
     </header>
 
-    <!-- 主题打卡 Section (Combined) -->
+    <!-- Educational Modal -->
+    <div class="modal" id="learnModal">
+        <div class="modal-content">
+            <button class="modal-close" aria-label="Close modal">×</button>
+            <div class="modal-tabs">
+                <button class="modal-tab active" data-tab="adhd">
+                    <span data-i18n="modal.tab.adhd">ADD/ADHD</span>
+                </button>
+                <button class="modal-tab" data-tab="infp">
+                    <span data-i18n="modal.tab.infp">INFP</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- ADHD Content -->
+                <div class="modal-panel active" id="panel-adhd">
+                    <h3 data-i18n="modal.adhd.title">什么是ADD/ADHD？</h3>
+                    <p data-i18n="modal.adhd.intro">ADD/ADHD不是缺陷，而是大脑运作方式不同。</p>
+                    <ul>
+                        <li data-i18n="modal.adhd.item1">注意力容易分散，但也可能超聚焦</li>
+                        <li data-i18n="modal.adhd.item2">时间感模糊，忘记做了什么、要做什么</li>
+                        <li data-i18n="modal.adhd.item3">传统计划方式常常失效</li>
+                    </ul>
+                    <p data-i18n="modal.adhd.tip"><strong>手帐可以是你的锚点：</strong>记录让你看到时间是怎么过的，不需要完美执行计划。</p>
+                </div>
+                <!-- INFP Content -->
+                <div class="modal-panel" id="panel-infp">
+                    <h3 data-i18n="modal.infp.title">什么是INFP？</h3>
+                    <p data-i18n="modal.infp.intro">INFP是MBTI中的一种人格类型，代表内向、直觉、情感、感知。</p>
+                    <ul>
+                        <li data-i18n="modal.infp.item1">追求意义和真实性</li>
+                        <li data-i18n="modal.infp.item2">内心世界丰富</li>
+                        <li data-i18n="modal.infp.item3">不喜欢被规则束缚（P类型）</li>
+                    </ul>
+                    <p data-i18n="modal.infp.tip"><strong>P vs J：</strong>J人喜欢计划，P人喜欢灵活。作为P人，与其强迫自己计划，不如用记录来了解自己。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 1. 手帐人格测试 Section -->
+    <section id="mbti" class="section mbti">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">~ 手帐人格测试 ~</span>
+                <h2 class="section-title">发现你的手帐风格</h2>
+                <p class="section-subtitle">27道题，找到最适合你的手帐方式</p>
+            </div>
+
+            <div class="mbti-container">
+                <!-- Progress -->
+                <div class="mbti-progress">
+                    <div class="mbti-progress-bar">
+                        <div class="mbti-progress-fill" id="mbtiProgressFill"></div>
+                    </div>
+                    <div class="mbti-progress-text">
+                        <span id="mbtiQuestionNum">1</span> / 27
+                    </div>
+                </div>
+
+                <!-- Questions -->
+                <div class="mbti-questions" id="mbtiQuestions">
+                    <!-- Dynamically filled -->
+                </div>
+
+                <!-- Navigation -->
+                <div class="mbti-nav" id="mbtiNav">
+                    <button class="btn btn-secondary" id="mbtiPrevBtn" disabled>← 上一题</button>
+                    <button class="btn btn-primary" id="mbtiNextBtn">下一题 →</button>
+                </div>
+
+                <!-- Result -->
+                <div class="mbti-result" id="mbtiResult" style="display: none;">
+                    <!-- Dynamically filled -->
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 2. 主题打卡 Section -->
     <section id="track" class="section track">
         <div class="container">
             <div class="section-header">
@@ -85,19 +174,24 @@
                 <h2 class="section-title" data-i18n="track.title">记录你的手帐旅程</h2>
             </div>
             <div class="track-layout">
-                <!-- 左侧：本月主题 -->
+                <!-- 左侧：本月主题（带图片） -->
                 <div class="track-theme">
                     <div class="theme-card">
-                        <div class="theme-badge">本月主题</div>
-                        <div class="theme-content">
-                            <span class="theme-emoji">🌸</span>
-                            <span class="theme-name" data-i18n="track.themeName">四月：记录感恩</span>
+                        <div class="theme-image">
+                            <img src="images/april-theme.jpg" alt="四月主题" class="theme-img">
                         </div>
-                        <p class="theme-desc" data-i18n="track.themeDesc">每天写下一件让你感恩的事</p>
-                        <div class="theme-ideas">
-                            <span class="idea-tag">感恩阳光</span>
-                            <span class="idea-tag">感恩朋友</span>
-                            <span class="idea-tag">感恩美食</span>
+                        <div class="theme-info">
+                            <div class="theme-badge">本月主题</div>
+                            <div class="theme-content">
+                                <span class="theme-emoji">🌸</span>
+                                <span class="theme-name" data-i18n="track.themeName">四月：记录感恩</span>
+                            </div>
+                            <p class="theme-desc" data-i18n="track.themeDesc">每天写下一件让你感恩的事</p>
+                            <div class="theme-ideas">
+                                <span class="idea-tag">感恩阳光</span>
+                                <span class="idea-tag">感恩朋友</span>
+                                <span class="idea-tag">感恩美食</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,127 +235,56 @@
         </div>
     </section>
 
-    <!-- Educational Modal -->
-    <div class="modal" id="learnModal">
-        <div class="modal-content">
-            <button class="modal-close" aria-label="Close modal">×</button>
-            <div class="modal-tabs">
-                <button class="modal-tab active" data-tab="adhd">
-                    <span data-i18n="modal.tab.adhd">ADD/ADHD</span>
-                </button>
-                <button class="modal-tab" data-tab="infp">
-                    <span data-i18n="modal.tab.infp">INFP</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <!-- ADHD Content -->
-                <div class="modal-panel active" id="panel-adhd">
-                    <h3 data-i18n="modal.adhd.title">什么是ADD/ADHD？</h3>
-                    <p data-i18n="modal.adhd.intro">ADD/ADHD不是缺陷，而是大脑运作方式不同。</p>
-                    <ul>
-                        <li data-i18n="modal.adhd.item1">注意力容易分散，但也可能超聚焦</li>
-                        <li data-i18n="modal.adhd.item2">时间感模糊，忘记做了什么、要做什么</li>
-                        <li data-i18n="modal.adhd.item3">传统计划方式常常失效</li>
-                    </ul>
-                    <p data-i18n="modal.adhd.tip"><strong>手帐可以是你的锚点：</strong>记录让你看到时间是怎么过的，不需要完美执行计划。</p>
-                </div>
-                <!-- INFP Content -->
-                <div class="modal-panel" id="panel-infp">
-                    <h3 data-i18n="modal.infp.title">什么是INFP？</h3>
-                    <p data-i18n="modal.infp.intro">INFP是MBTI中的一种人格类型，代表内向、直觉、情感、感知。</p>
-                    <ul>
-                        <li data-i18n="modal.infp.item1">追求意义和真实性</li>
-                        <li data-i18n="modal.infp.item2">内心世界丰富</li>
-                        <li data-i18n="modal.infp.item3">不喜欢被规则束缚（P类型）</li>
-                    </ul>
-                    <p data-i18n="modal.infp.tip"><strong>P vs J：</strong>J人喜欢计划，P人喜欢灵活。作为P人，与其强迫自己计划，不如用记录来了解自己。</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Combined Journal Test Section -->
-    <section id="mbti" class="section mbti">
+    <!-- 3. Color Palette Section -->
+    <section id="colors" class="section colors">
         <div class="container">
             <div class="section-header">
-                <span class="section-label">~ 手帐人格测试 ~</span>
-                <h2 class="section-title">发现你的手帐风格</h2>
-                <p class="section-subtitle">24道题，找到最适合你的手帐方式</p>
+                <span class="section-label">~ 色彩灵感 ~</span>
+                <h2 class="section-title">探索你的配色</h2>
+                <p class="section-subtitle">点击颜色复制色值，旋转色轮发现新搭配</p>
             </div>
 
-            <div class="mbti-container">
-                <!-- Progress -->
-                <div class="mbti-progress">
-                    <div class="mbti-progress-bar">
-                        <div class="mbti-progress-fill" id="mbtiProgressFill"></div>
+            <div class="color-wheel-container">
+                <!-- 色轮配色器 -->
+                <div class="color-wheel-tool">
+                    <div class="color-picker-panel">
+                        <label>选择主色</label>
+                        <input type="color" id="wheelBaseColor" value="#7c6a9a" class="wheel-color-input">
+                        <span class="wheel-hex-display" id="wheelHexDisplay">#7c6a9a</span>
                     </div>
-                    <div class="mbti-progress-text">
-                        <span id="mbtiQuestionNum">1</span> / 24
+
+                    <div class="scheme-tabs" id="schemeTabs">
+                        <button class="scheme-tab active" data-scheme="complementary">互补色</button>
+                        <button class="scheme-tab" data-scheme="analogous">邻近色</button>
+                        <button class="scheme-tab" data-scheme="triadic">三角色</button>
+                        <button class="scheme-tab" data-scheme="split">分裂互补</button>
+                        <button class="scheme-tab" data-scheme="tetradic">四角色</button>
+                        <button class="scheme-tab" data-scheme="mono">同色系</button>
+                    </div>
+
+                    <!-- 圆形色轮 -->
+                    <div class="color-wheel" id="colorWheel">
+                        <div class="wheel-center" id="wheelCenter"></div>
+                        <div class="wheel-ring" id="wheelRing"></div>
+                    </div>
+
+                    <div class="scheme-info" id="schemeInfo">
+                        <p class="scheme-name">互补色方案</p>
+                        <p class="scheme-desc">色相相对180°，对比强烈，视觉冲击</p>
                     </div>
                 </div>
 
-                <!-- Questions -->
-                <div class="mbti-questions" id="mbtiQuestions">
-                    <!-- Dynamically filled -->
+                <!-- 预设配色库 -->
+                <div class="preset-palette-section">
+                    <h4 class="preset-title">精选配色</h4>
+                    <div class="palette-category-filter" id="paletteFilter"></div>
+                    <div class="preset-palette-grid" id="presetPaletteGrid"></div>
                 </div>
-
-                <!-- Navigation -->
-                <div class="mbti-nav" id="mbtiNav">
-                    <button class="btn btn-secondary" id="mbtiPrevBtn" disabled>← 上一题</button>
-                    <button class="btn btn-primary" id="mbtiNextBtn">下一题 →</button>
-                </div>
-
-                <!-- Result -->
-                <div class="mbti-result" id="mbtiResult" style="display: none;">
-                    <!-- Dynamically filled -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section id="contact" class="section contact">
-        <div class="container">
-            <div class="contact-content">
-                <div class="contact-text">
-                    <span class="section-label" data-i18n="contact.label">~ 联系我 ~</span>
-                    <h2 class="section-title" data-i18n="contact.title">一起探索手帐</h2>
-                    <p data-i18n="contact.intro">想定制专属手帐系统？有问题想聊？欢迎联系我。</p>
-                    <div class="contact-methods">
-                        <a href="https://www.xiaohongshu.com/user/profile/801829421" target="_blank" rel="noopener" class="contact-method">
-                            <span class="contact-icon">📕</span>
-                            <span>小红书: 801829421</span>
-                        </a>
-                        <a href="https://instagram.com/sophie.journal" target="_blank" rel="noopener" class="contact-method">
-                            <span class="contact-icon">📸</span>
-                            <span>Instagram: sophie.journal</span>
-                        </a>
-                        <a href="mailto:741808831@qq.com" class="contact-method">
-                            <span class="contact-icon">📧</span>
-                            <span>741808831@qq.com</span>
-                        </a>
-                    </div>
-                </div>
-                <form class="contact-form" action="#" method="POST">
-                    <div class="form-group">
-                        <label for="name" data-i18n="contact.formName">名字</label>
-                        <input type="text" id="name" name="name" placeholder="叫我..." required>
-                    </div>
-                    <div class="form-group">
-                        <label for="email" data-i18n="contact.formEmail">邮箱</label>
-                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="message" data-i18n="contact.formMessage">想说的话</label>
-                        <textarea id="message" name="message" rows="3" placeholder="关于手帐的问题、想法..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-full" data-i18n="contact.formSubmit">发送</button>
-                </form>
             </div>
         </div>
     </section>
 
-    <!-- Resources Section (设计思路) -->
+    <!-- 4. Resources Section (素材库) -->
     <section id="resources" class="section resources">
         <div class="container">
             <div class="section-header">
@@ -328,25 +351,70 @@
                 <div class="collapsible-card">
                     <button class="collapsible-header" onclick="toggleCollapsible(this)">
                         <span class="card-icon">📦</span>
-                        <span class="card-title" data-i18n="resources.materials">素材下载</span>
+                        <span class="card-title" data-i18n="resources.materials">设计灵感</span>
                         <span class="card-toggle">▼</span>
                     </button>
                     <div class="collapsible-content">
-                        <div class="materials-list">
-                            <div class="material-item"><span>月历模板</span><button class="btn btn-small">下载</button></div>
-                            <div class="material-item"><span>周计划模板</span><button class="btn btn-small">下载</button></div>
-                            <div class="material-item"><span>习惯打卡</span><button class="btn btn-small">下载</button></div>
-                            <div class="material-item"><span>Timeline模板</span><button class="btn btn-small">下载</button></div>
+                        <!-- 可下载模板 -->
+                        <div class="materials-grid">
+                            <div class="material-card">
+                                <div class="material-preview">
+                                    <div class="preview-template monthly"></div>
+                                </div>
+                                <div class="material-info">
+                                    <span class="material-name">月历模板</span>
+                                    <span class="material-desc">适合习惯追踪、重要日期标注</span>
+                                    <button class="btn btn-small btn-download" onclick="downloadTemplate('monthly')">下载 PDF</button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview">
+                                    <div class="preview-template weekly"></div>
+                                </div>
+                                <div class="material-info">
+                                    <span class="material-name">周计划模板</span>
+                                    <span class="material-desc">每日任务+时间轴组合</span>
+                                    <button class="btn btn-small btn-download" onclick="downloadTemplate('weekly')">下载 PDF</button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview">
+                                    <div class="preview-template habit"></div>
+                                </div>
+                                <div class="material-info">
+                                    <span class="material-name">习惯打卡表</span>
+                                    <span class="material-desc">追踪喝水、阅读、运动等习惯</span>
+                                    <button class="btn btn-small btn-download" onclick="downloadTemplate('habit')">下载 PDF</button>
+                                </div>
+                            </div>
+                            <div class="material-card">
+                                <div class="material-preview">
+                                    <div class="preview-template timeline"></div>
+                                </div>
+                                <div class="material-info">
+                                    <span class="material-name">Timeline模板</span>
+                                    <span class="material-desc">记录时间流动，适合ADHD</span>
+                                    <button class="btn btn-small btn-download" onclick="downloadTemplate('timeline')">下载 PDF</button>
+                                </div>
+                            </div>
                         </div>
-                        <div class="quotes-section" id="quotesSection"></div>
-                        <div class="elements-section" id="elementsSection"></div>
+                        <!-- 手帐常用元素 -->
+                        <div class="elements-section">
+                            <p class="elements-title">手帐常用元素</p>
+                            <div class="elements-grid" id="elementsGrid"></div>
+                        </div>
+                        <!-- 手帐语录 -->
+                        <div class="quotes-section">
+                            <p class="quotes-title">手帐语录</p>
+                            <div class="quotes-grid" id="quotesGrid"></div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
+    <!-- 5. About Section -->
     <section id="about" class="section about">
         <!-- 海洋元素装饰 - 锚点与时间流动 -->
         <div class="about-anchor">⚓</div>
@@ -381,7 +449,7 @@
         </div>
     </section>
 
-    <!-- Q&A Section (Collapsible) -->
+    <!-- 6. Q&A Section (Collapsible) -->
     <section id="qa" class="section qa">
         <div class="container">
             <div class="section-header">
@@ -392,6 +460,48 @@
 
             <div class="qa-collapsible" id="qaCollapsible">
                 <!-- Dynamically filled -->
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Contact Section (放在最后) -->
+    <section id="contact" class="section contact">
+        <div class="container">
+            <div class="contact-content">
+                <div class="contact-text">
+                    <span class="section-label" data-i18n="contact.label">~ 联系我 ~</span>
+                    <h2 class="section-title" data-i18n="contact.title">一起探索手帐</h2>
+                    <p data-i18n="contact.intro">想定制专属手帐系统？有问题想聊？欢迎联系我。</p>
+                    <div class="contact-methods">
+                        <a href="https://www.xiaohongshu.com/user/profile/801829421" target="_blank" rel="noopener" class="contact-method">
+                            <span class="contact-icon">📕</span>
+                            <span>小红书: 801829421</span>
+                        </a>
+                        <a href="https://instagram.com/sophie.journal" target="_blank" rel="noopener" class="contact-method">
+                            <span class="contact-icon">📸</span>
+                            <span>Instagram: sophie.journal</span>
+                        </a>
+                        <a href="mailto:741808831@qq.com" class="contact-method">
+                            <span class="contact-icon">📧</span>
+                            <span>741808831@qq.com</span>
+                        </a>
+                    </div>
+                </div>
+                <form class="contact-form" action="#" method="POST">
+                    <div class="form-group">
+                        <label for="name" data-i18n="contact.formName">名字</label>
+                        <input type="text" id="name" name="name" placeholder="叫我..." required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email" data-i18n="contact.formEmail">邮箱</label>
+                        <input type="email" id="email" name="email" placeholder="your@email.com" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message" data-i18n="contact.formMessage">想说的话</label>
+                        <textarea id="message" name="message" rows="3" placeholder="关于手帐的问题、想法..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full" data-i18n="contact.formSubmit">发送</button>
+                </form>
             </div>
         </div>
     </section>

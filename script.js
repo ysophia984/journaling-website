@@ -15,13 +15,13 @@ document.addEventListener('DOMContentLoaded', function() {
     initImageUpload();
     initContactForm();
     initCatHelper();
-    initColorQuiz();
     initQA();
     initHelpForm();
     initMBTITest();
     initCalendar();
     initTrackingAutoCheck();
-    initArtStyles();
+    initColorWheel();
+    initResources();
 });
 
 // ============================================
@@ -38,7 +38,7 @@ function initLanguageSwitcher() {
     var savedLang = localStorage.getItem('sophieLang') || 'zh';
     currentLang = savedLang;
     switchLanguage(savedLang);
-    langCurrent.textContent = savedLang === 'zh' ? 'CN' : 'EN';
+    langCurrent.textContent = savedLang === 'zh' ? 'CN' : (savedLang === 'tw' ? 'TW' : 'EN');
 
     langBtn.addEventListener('click', function(e) {
         e.stopPropagation();
@@ -55,13 +55,60 @@ function initLanguageSwitcher() {
             currentLang = lang;
             localStorage.setItem('sophieLang', lang);
             switchLanguage(lang);
-            langCurrent.textContent = lang === 'zh' ? 'CN' : 'EN';
+            langCurrent.textContent = lang === 'zh' ? 'CN' : (lang === 'tw' ? 'TW' : 'EN');
             langSelector.classList.remove('open');
 
             langOptions.forEach(function(opt) { opt.classList.remove('selected'); });
             this.classList.add('selected');
+
+            // Re-render dynamic content
+            reRenderDynamicContent();
         });
     });
+}
+
+function reRenderDynamicContent() {
+    // Re-render test question if test is in progress
+    var mbtiQuestions = document.getElementById('mbtiQuestions');
+    var mbtiResult = document.getElementById('mbtiResult');
+    if (mbtiQuestions && mbtiResult && mbtiResult.style.display === 'none' && mbtiCurrentQuestion >= 0) {
+        renderMBTIQuestion(mbtiQuestions, mbtiCurrentQuestion);
+    }
+
+    // Re-render Q&A
+    var qaCollapsible = document.getElementById('qaCollapsible');
+    if (qaCollapsible) {
+        renderQACollapsible(qaCollapsible);
+    }
+
+    // Re-render color palettes (both versions)
+    var presetGrid = document.getElementById('presetPaletteGrid');
+    var paletteCategories = document.querySelector('.palette-categories');
+    if (presetGrid) {
+        if (presetPalettes) {
+            renderPresetPalettes(presetGrid);
+        }
+        renderPresetPaletteMiniCards(currentPaletteCategory || 'all');
+    }
+
+    // Re-render category tabs
+    if (paletteCategories) {
+        renderCategoryTabs(paletteCategories);
+    }
+
+    // Re-init preset palettes filter buttons
+    var paletteFilter = document.getElementById('paletteFilter');
+    if (paletteFilter) {
+        initPresetPalettes();
+    }
+
+    // Re-render user tips list
+    renderUserTipsList();
+
+    // Re-init default tips with new language
+    defaultTipsInitialized = false;
+    defaultTips = [];
+    initDefaultTips();
 }
 
 function switchLanguage(lang) {
@@ -83,18 +130,31 @@ function switchLanguage(lang) {
 // Mobile Navigation
 // ============================================
 function initMobileNav() {
-    var navToggle = document.querySelector('.nav-toggle');
-    var navMenu = document.querySelector('.nav-menu');
+    var navToggle = document.getElementById('navToggle');
+    var navMenu = document.getElementById('navMenu');
+    var navOverlay = document.getElementById('navOverlay');
 
     if (!navToggle || !navMenu) return;
 
     navToggle.addEventListener('click', function() {
+        navToggle.classList.toggle('active');
         navMenu.classList.toggle('active');
+        if (navOverlay) navOverlay.classList.toggle('active');
     });
+
+    if (navOverlay) {
+        navOverlay.addEventListener('click', function() {
+            navToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            navOverlay.classList.remove('active');
+        });
+    }
 
     navMenu.querySelectorAll('a').forEach(function(link) {
         link.addEventListener('click', function() {
+            navToggle.classList.remove('active');
             navMenu.classList.remove('active');
+            if (navOverlay) navOverlay.classList.remove('active');
         });
     });
 }
@@ -110,9 +170,13 @@ function initSmoothScroll() {
             e.preventDefault();
             var target = document.querySelector(href);
             if (target) {
-                var navbarHeight = document.querySelector('.navbar').offsetHeight;
+                // On mobile, account for top navbar height
+                var offset = 20;
+                if (window.innerWidth <= 768) {
+                    offset = 52 + 20;
+                }
                 window.scrollTo({
-                    top: target.offsetTop - navbarHeight - 20,
+                    top: target.offsetTop - offset,
                     behavior: 'smooth'
                 });
             }
@@ -432,7 +496,7 @@ function prevStep() {
 function nextStep() {
     var valid = validateStep(currentStep);
     if (!valid) {
-        showNotification(currentLang === 'zh' ? '请完成这一步' : 'Please complete this step');
+        showNotification(currentLang === 'en' ? 'Please complete this step' : (currentLang === 'tw' ? '請完成這一步' : '请完成这一步'));
         return;
     }
 
@@ -690,7 +754,7 @@ function initContactForm() {
         btn.disabled = true;
 
         setTimeout(function() {
-            showNotification(currentLang === 'zh' ? '发送成功！' : 'Sent successfully!');
+            showNotification(currentLang === 'en' ? 'Sent successfully!' : (currentLang === 'tw' ? '發送成功！' : '发送成功！'));
             form.reset();
             btn.textContent = currentLang === 'zh' ? '发送' : 'Send';
             btn.disabled = false;
@@ -708,7 +772,7 @@ function showNotification(msg) {
     var div = document.createElement('div');
     div.className = 'notification';
     div.textContent = msg;
-    div.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#7c6a9a;color:white;padding:12px 20px;border-radius:8px;z-index:9999;';
+    div.style.cssText = 'position:fixed;bottom:20px;right:20px;background:#7a6b8a;color:white;padding:12px 20px;border-radius:8px;z-index:9999;';
 
     document.body.appendChild(div);
     setTimeout(function() { if (div.parentNode) div.remove(); }, 3000);
@@ -728,15 +792,26 @@ var catMoveInterval = null;
 var catRoamingInterval = null;
 var catVisibility = 'private';
 
-// Default tips
-var defaultTips = [
-    { type: 'tip', content: '尺子反过来用，防止荧光笔晕开', source: 'default' },
-    { type: 'tip', content: '用铅笔先打底，再用水笔描边', source: 'default' },
-    { type: 'tip', content: '留白也是排版的一部分', source: 'default' },
-    { type: 'tip', content: '贴纸可以剪成小块重复使用', source: 'default' },
-    { type: 'reminder', content: '别忘了今日打卡哦~', source: 'default' },
-    { type: 'tip', content: '颜色不超过3种更好看', source: 'default' }
-];
+// Default tips - loaded from journalTips data
+var defaultTips = [];
+var defaultTipsInitialized = false;
+
+function initDefaultTips() {
+    if (defaultTipsInitialized || !journalTips) return;
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+
+    journalTips.forEach(function(tip) {
+        var content = isEn ? (tip.contentEn || tip.content) : (isTw ? (tip.contentTw || tip.content) : tip.content);
+        defaultTips.push({ type: 'tip', content: content, source: 'default' });
+    });
+
+    // Add some reminders
+    var reminderText = isEn ? 'Don\'t forget to check in today~' : (isTw ? '别忘了今日打卡哦~' : '别忘了今日打卡哦~');
+    defaultTips.push({ type: 'reminder', content: reminderText, source: 'default' });
+
+    defaultTipsInitialized = true;
+}
 
 function initCatHelper() {
     var catHelper = document.getElementById('catHelper');
@@ -752,17 +827,24 @@ function initCatHelper() {
     // Load user tips
     loadUserTips();
 
-    // Initialize position
-    catPosition = getRandomPosition();
+    // Set initial position (bottom-right)
+    catPosition = {
+        x: window.innerWidth - 100,
+        y: window.innerHeight - 150
+    };
     updateCatPosition();
 
     if (catEnabled) {
         catToggle.classList.add('active');
+        catHelper.classList.add('visible');
         startCatRoaming();
     }
 
-    // Toggle button
-    catToggle.addEventListener('click', function() {
+    // Toggle button - click handler
+    catToggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        e.stopPropagation();
+
         catEnabled = !catEnabled;
         localStorage.setItem('catEnabled', catEnabled);
 
@@ -779,7 +861,9 @@ function initCatHelper() {
 
     // Idea box button
     if (ideaBoxBtn) {
-        ideaBoxBtn.addEventListener('click', function() {
+        ideaBoxBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
             openIdeaBox();
         });
     }
@@ -806,8 +890,13 @@ function updateCatPosition() {
     var catHelper = document.getElementById('catHelper');
     if (!catHelper) return;
 
-    catHelper.style.left = catPosition.x + 'px';
-    catHelper.style.top = catPosition.y + 'px';
+    // Use right/bottom positioning instead of left/top for more natural positioning
+    if (catPosition.x && catPosition.y) {
+        catHelper.style.right = 'auto';
+        catHelper.style.bottom = 'auto';
+        catHelper.style.left = catPosition.x + 'px';
+        catHelper.style.top = catPosition.y + 'px';
+    }
 }
 
 function startCatRoaming() {
@@ -819,14 +908,16 @@ function startCatRoaming() {
     catHelper.classList.add('visible');
     showRandomMessage();
 
-    // More frequent appearance - move every 3-6 seconds
+    // Clear any existing intervals
+    if (catRoamingInterval) clearInterval(catRoamingInterval);
+
+    // Move every 5-8 seconds
     catRoamingInterval = setInterval(function() {
         if (!catIsGrabbed && catEnabled) {
-            // Move to new random position
             catTarget = getRandomPosition();
             moveCatToTarget();
         }
-    }, 3000 + Math.random() * 3000);
+    }, 5000 + Math.random() * 3000);
 
     // Show message periodically
     setInterval(function() {
@@ -881,6 +972,9 @@ function moveCatToTarget() {
 function showRandomMessage() {
     var catMessage = document.getElementById('catMessage');
     if (!catMessage) return;
+
+    // Initialize default tips if needed
+    initDefaultTips();
 
     // Combine default tips with user tips
     var allTips = defaultTips.concat(catMessages.filter(function(t) {
@@ -1133,7 +1227,7 @@ function submitTip() {
 
     var content = ideaInput.value.trim();
     if (!content) {
-        showNotification(currentLang === 'zh' ? '请输入内容' : 'Please enter content');
+        showNotification(currentLang === 'en' ? 'Please enter content' : (currentLang === 'tw' ? '請輸入內容' : '请输入内容'));
         return;
     }
 
@@ -1155,7 +1249,7 @@ function submitTip() {
 
     // Clear input and show success
     ideaInput.value = '';
-    showNotification(currentLang === 'zh' ? '灵感已添加！' : 'Tip added!');
+    showNotification(currentLang === 'en' ? 'Tip added!' : (currentLang === 'tw' ? '靈感已添加！' : '灵感已添加！'));
 
     // Update list
     renderUserTipsList();
@@ -1175,15 +1269,21 @@ function renderUserTipsList() {
     var container = document.getElementById('userTipsList');
     if (!container) return;
 
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+
     var savedTips = localStorage.getItem('userTips');
     var tips = savedTips ? JSON.parse(savedTips) : [];
 
+    var titleText = isEn ? 'Your inspirations:' : (isTw ? '你的靈感：' : '你的灵感：');
+    var emptyText = isEn ? 'No inspirations yet, come add some~' : (isTw ? '還沒有靈感，快來添加吧~' : '还没有灵感，快来添加吧~');
+
     if (tips.length === 0) {
-        container.innerHTML = '<p class="user-tips-title">你的灵感：</p><p style="color:var(--color-text-muted);font-size:0.8rem;">还没有灵感，快来添加吧~</p>';
+        container.innerHTML = '<p class="user-tips-title">' + titleText + '</p><p style="color:var(--color-text-muted);font-size:0.8rem;">' + emptyText + '</p>';
         return;
     }
 
-    var html = '<p class="user-tips-title">你的灵感：</p>';
+    var html = '<p class="user-tips-title">' + titleText + '</p>';
     tips.forEach(function(tip, index) {
         var icon = tip.visibility === 'private' ? '🔒' : '🌍';
         html += '<div class="user-tip-item">';
@@ -1205,7 +1305,8 @@ function deleteTip(index) {
     catMessages = tips;
 
     renderUserTipsList();
-    showNotification(currentLang === 'zh' ? '已删除' : 'Deleted');
+    var deleteText = currentLang === 'en' ? 'Deleted' : (currentLang === 'tw' ? '已刪除' : '已删除');
+    showNotification(deleteText);
 }
 
 // Make it global for onclick
@@ -1355,9 +1456,13 @@ function initPaletteTool() {
 }
 
 function renderCategoryTabs(container) {
-    var html = '<button class="palette-category-tab active" data-category="all">全部</button>';
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+    var allText = isEn ? 'All' : (isTw ? '全部' : '全部');
+
+    var html = '<button class="palette-category-tab active" data-category="all">' + allText + '</button>';
     styleCategories.forEach(function(cat) {
-        html += '<button class="palette-category-tab" data-category="' + cat.name + '">' + cat.icon + ' ' + cat.name + '</button>';
+        html += '<button class="palette-category-tab" data-category="' + cat.name + '">' + cat.icon + ' ' + (isEn ? (cat.nameEn || cat.name) : (isTw ? (cat.nameTw || cat.name) : cat.name)) + '</button>';
     });
     container.innerHTML = html;
 
@@ -1373,6 +1478,10 @@ function renderCategoryTabs(container) {
 }
 
 function renderPresetPalettes(container) {
+    if (!container) return;
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+
     var filteredPalettes = presetPalettes;
     if (currentPaletteCategory !== 'all') {
         filteredPalettes = presetPalettes.filter(function(p) {
@@ -1383,11 +1492,11 @@ function renderPresetPalettes(container) {
     var html = '';
     filteredPalettes.forEach(function(palette) {
         html += '<div class="palette-card">';
-        html += '<div class="palette-card-name">' + palette.name + '</div>';
-        html += '<div class="palette-card-desc">' + palette.description + '</div>';
+        html += '<div class="palette-card-name">' + (isEn ? (palette.nameEn || palette.name) : (isTw ? (palette.nameTw || palette.name) : palette.name)) + '</div>';
+        html += '<div class="palette-card-desc">' + (isEn ? (palette.descriptionEn || palette.description) : (isTw ? (palette.descriptionTw || palette.description) : palette.description)) + '</div>';
         html += '<div class="palette-colors-display">';
         palette.colors.forEach(function(color) {
-            html += '<div class="palette-color-block" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '" data-name="' + color.name + '"></div>';
+            html += '<div class="palette-color-block" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '" data-name="' + (isEn ? (color.nameEn || color.name) : (isTw ? (color.nameTw || color.name) : color.name)) + '"></div>';
         });
         html += '</div>';
         html += '</div>';
@@ -1510,16 +1619,18 @@ function initQA() {
 }
 
 function renderQACollapsible(container) {
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
     var html = '';
     qaData.forEach(function(qa, index) {
         html += '<div class="qa-card-collapsible">';
         html += '<div class="qa-question" onclick="this.parentElement.classList.toggle(\'open\')">';
         html += '<span class="qa-q-icon">Q</span>';
-        html += '<span class="qa-q-text">' + qa.question + '</span>';
+        html += '<span class="qa-q-text">' + (isEn ? (qa.questionEn || qa.question) : (isTw ? (qa.questionTw || qa.question) : qa.question)) + '</span>';
         html += '<span class="qa-toggle">▼</span>';
         html += '</div>';
         html += '<div class="qa-answer">';
-        html += '<div class="qa-answer-content">' + qa.answer + '</div>';
+        html += '<div class="qa-answer-content">' + (isEn ? (qa.answerEn || qa.answer) : (isTw ? (qa.answerTw || qa.answer) : qa.answer)) + '</div>';
         html += '</div>';
         html += '</div>';
     });
@@ -1572,7 +1683,7 @@ function initHelpForm() {
             // Here you would normally send to a server or email service
             // For now, we'll just show a success message and reset
             setTimeout(function() {
-                showNotification(currentLang === 'zh' ? '提交成功！我会尽快回复你。' : 'Submitted! I will reply soon.');
+                showNotification(currentLang === 'en' ? 'Submitted! I will reply soon.' : (currentLang === 'tw' ? '提交成功！我會盡快回覆你。' : '提交成功！我会尽快回复你。'));
                 form.reset();
                 if (container) container.innerHTML = '';
                 btn.textContent = currentLang === 'zh' ? '提交求助' : 'Submit';
@@ -1630,7 +1741,7 @@ function initMBTITest() {
     nextBtn.addEventListener('click', function() {
         // Check if current question is answered
         if (mbtiAnswers[mbtiCurrentQuestion] === undefined) {
-            showNotification(currentLang === 'zh' ? '请先选择一个答案' : 'Please select an answer first');
+            showNotification(currentLang === 'en' ? 'Please select an answer first' : (currentLang === 'tw' ? '請先選擇一個答案' : '请先选择一个答案'));
             return;
         }
 
@@ -1647,22 +1758,27 @@ function initMBTITest() {
 
 function renderMBTIQuestion(container, index) {
     var q = testQuestions[index];
-    var isZh = currentLang === 'zh';
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
 
     var html = '<div class="mbti-question-card active">';
 
     // Add plus indicator for color style questions
     if (q.isPlus) {
-        html += '<span class="mbti-plus-badge">' + (isZh ? '✨ 加分项' : '✨ Bonus') + '</span>';
+        var plusText = isEn ? '✨ Bonus' : (isTw ? '✨ 加分項' : '✨ 加分项');
+        html += '<span class="mbti-plus-badge">' + plusText + '</span>';
     }
 
-    html += '<p class="mbti-question-text">' + (isZh ? q.question : q.questionEn) + '</p>';
+    // Select question text based on language
+    var questionText = isEn ? (q.questionEn || q.question) : (isTw ? (q.questionTw || q.question) : q.question);
+    html += '<p class="mbti-question-text">' + questionText + '</p>';
     html += '<div class="mbti-options">';
 
     // Render 3 options
     q.options.forEach(function(opt, i) {
         html += '<div class="mbti-option" data-value="' + opt.value + '" data-dimension="' + q.dimension + '" data-is-plus="' + (q.isPlus ? 'true' : 'false') + '">';
-        html += '<span>' + (isZh ? opt.text : opt.textEn) + '</span>';
+        var optText = isEn ? (opt.textEn || opt.text) : (isTw ? (opt.textTw || opt.text) : opt.text);
+        html += '<span>' + optText + '</span>';
         html += '</div>';
     });
 
@@ -1677,11 +1793,17 @@ function renderMBTIQuestion(container, index) {
     // Update buttons
     var prevBtn = document.getElementById('mbtiPrevBtn');
     prevBtn.disabled = index === 0;
+    var prevText = isEn ? '← Previous' : (isTw ? '← 上一題' : '← 上一题');
+    prevBtn.textContent = prevText;
 
     var nextBtn = document.getElementById('mbtiNextBtn');
-    nextBtn.textContent = index === mbtiTotalQuestions - 1
-        ? (isZh ? '查看结果' : 'See Result')
-        : (isZh ? '下一题 →' : 'Next →');
+    if (isEn) {
+        nextBtn.textContent = index === mbtiTotalQuestions - 1 ? 'See Result' : 'Next →';
+    } else if (isTw) {
+        nextBtn.textContent = index === mbtiTotalQuestions - 1 ? '查看結果' : '下一題 →';
+    } else {
+        nextBtn.textContent = index === mbtiTotalQuestions - 1 ? '查看结果' : '下一题 →';
+    }
 
     // Mark previously selected answer
     if (mbtiAnswers[index] !== undefined) {
@@ -1714,6 +1836,15 @@ function renderMBTIQuestion(container, index) {
                 value: value,
                 isPlus: isPlus
             };
+
+            // Auto-advance to next question after selection (with delay for visual feedback)
+            if (mbtiCurrentQuestion < mbtiTotalQuestions - 1) {
+                setTimeout(function() {
+                    mbtiCurrentQuestion++;
+                    renderMBTIQuestion(container, mbtiCurrentQuestion);
+                    updateMBTIProgress();
+                }, 300);
+            }
         });
     });
 }
@@ -1743,26 +1874,49 @@ function showMBTIResult() {
     var fill = document.getElementById('mbtiProgressFill');
     if (fill) fill.style.width = '100%';
 
-    var isZh = currentLang === 'zh';
+    var isEn = currentLang === 'en';
+    var isZhOrTw = currentLang === 'zh' || currentLang === 'tw';
     var type = result.type;
     var tendencies = result.tendencies;
+    var animal = type.animal;
+    var html = '';
+
+    // ===== 动物形象卡片 ===== (NEW - 最先展示)
+    if (animal) {
+        html += '<div class="animal-avatar-card" style="background: linear-gradient(135deg, ' + animal.color + '22 0%, ' + animal.color + '44 100%);">';
+        html += '<div class="animal-avatar-wrapper">';
+        html += '<div class="animal-emoji-large">' + animal.emoji + '</div>';
+        html += '<div class="animal-glow" style="background: ' + animal.color + ';"></div>';
+        html += '</div>';
+        html += '<div class="animal-info">';
+        html += '<h3 class="animal-name">' + (isEn ? animal.nameEn : (animal.nameTw || animal.name)) + '</h3>';
+        html += '<p class="animal-desc">' + (isEn ? animal.descEn : (animal.descTw || animal.desc)) + '</p>';
+        html += '<div class="animal-traits">';
+        var traits = isEn ? (animal.traitsEn || animal.traits) : (isTw ? (animal.traitsTw || animal.traits) : animal.traits);
+        traits.forEach(function(trait) {
+            html += '<span class="animal-trait-tag" style="background: ' + animal.color + '33; border-color: ' + animal.color + ';">' + trait + '</span>';
+        });
+        html += '</div>';
+        html += '</div>';
+        html += '</div>';
+    }
 
     // ===== 结果头部 =====
-    var html = '<div class="mbti-result-header">';
+    html += '<div class="mbti-result-header">';
     html += '<span class="mbti-type-emoji">' + type.emoji + '</span>';
-    html += '<h3 class="mbti-type-name">' + (isZh ? type.name : type.nameEn) + '</h3>';
+    html += '<h3 class="mbti-type-name">' + (isEn ? type.nameEn : (type.nameTw || type.name)) + '</h3>';
     html += '</div>';
 
     // ===== 人格描述 =====
     html += '<div class="mbti-personality-box">';
-    html += '<h4>' + (isZh ? '你的手帐人格' : 'Your Journal Personality') + '</h4>';
-    html += '<p>' + (isZh ? type.personality : type.personalityEn) + '</p>';
-    html += '<p class="mbti-desc">' + (isZh ? type.desc : type.descEn) + '</p>';
+    html += '<h4>' + (isEn ? 'Your Journal Personality' : '你的手帐人格') + '</h4>';
+    html += '<p>' + (isEn ? type.personalityEn : (type.personalityTw || type.personality)) + '</p>';
+    html += '<p class="mbti-desc">' + (isEn ? type.descEn : (type.descTw || type.desc)) + '</p>';
     html += '</div>';
 
     // ===== 维度分析可视化 =====
     html += '<div class="mbti-dimensions-box">';
-    html += '<h4>' + (isZh ? '维度分析' : 'Dimension Analysis') + '</h4>';
+    html += '<h4>' + (isEn ? 'Dimension Analysis' : '维度分析') + '</h4>';
     html += '<div class="dimension-bars">';
 
     var dimLabelsZh = {
@@ -1801,10 +1955,10 @@ function showMBTIResult() {
     Object.keys(tendencies).forEach(function(dim) {
         if (dimLabelsZh[dim]) {
             var pct = tendencies[dim];
-            var label = isZh ? dimLabelsZh[dim] : dimLabelsEn[dim];
+            var label = isEn ? dimLabelsEn[dim] : dimLabelsZh[dim];
             var desc = pct > 50
-                ? (isZh ? dimDescZh[dim].high : dimDescEn[dim].high)
-                : (isZh ? dimDescZh[dim].low : dimDescEn[dim].low);
+                ? (isEn ? dimDescEn[dim].high : dimDescZh[dim].high)
+                : (isEn ? dimDescEn[dim].low : dimDescZh[dim].low);
 
             html += '<div class="dimension-item">';
             html += '<div class="dim-info">';
@@ -1824,13 +1978,13 @@ function showMBTIResult() {
     // ===== 行动步骤 =====
     if (type.starter) {
         html += '<div class="mbti-starter-box">';
-        html += '<h4>' + (isZh ? '如何开始' : 'How to Start') + '</h4>';
+        html += '<h4>' + (isEn ? 'How to Start' : '如何开始') + '</h4>';
 
         // 工具准备
         html += '<div class="starter-section">';
         html += '<span class="starter-icon">🛠️</span>';
         html += '<div class="starter-content">';
-        html += '<span class="starter-title">' + (isZh ? '准备工具' : 'Tools to Prepare') + '</span>';
+        html += '<span class="starter-title">' + (isEn ? 'Tools to Prepare' : '准备工具') + '</span>';
         var tools = type.starter.tools;
         tools.forEach(function(tool) {
             html += '<p class="starter-item">• ' + tool + '</p>';
@@ -1841,15 +1995,15 @@ function showMBTIResult() {
         html += '<div class="starter-section">';
         html += '<span class="starter-icon">📅</span>';
         html += '<div class="starter-content">';
-        html += '<span class="starter-title">' + (isZh ? '第一周尝试' : 'First Week') + '</span>';
-        html += '<p class="starter-item">' + type.starter.firstWeek + '</p>';
+        html += '<span class="starter-title">' + (isEn ? 'First Week' : '第一周尝试') + '</span>';
+        html += '<p class="starter-item">' + (isEn ? (type.starter.firstWeekEn || type.starter.firstWeek) : type.starter.firstWeek) + '</p>';
         html += '</div></div>';
 
         // 不要做的事
         html += '<div class="starter-section starter-dont">';
         html += '<span class="starter-icon">⚠️</span>';
         html += '<div class="starter-content">';
-        html += '<span class="starter-title">' + (isZh ? '避免' : 'Avoid') + '</span>';
+        html += '<span class="starter-title">' + (isEn ? 'Avoid' : '避免') + '</span>';
         var donts = type.starter.dontDo;
         donts.forEach(function(dont) {
             html += '<p class="starter-item">• ' + dont + '</p>';
@@ -1863,25 +2017,25 @@ function showMBTIResult() {
     var detailedRecs = getDetailedRecommendations(type, tendencies);
     if (detailedRecs.length > 0) {
         html += '<div class="mbti-detailed-rec">';
-        html += '<h4>' + (isZh ? '推荐手帐类型' : 'Recommended Types') + '</h4>';
+        html += '<h4>' + (isEn ? 'Recommended Types' : '推荐手帐类型') + '</h4>';
 
         detailedRecs.forEach(function(rec) {
             html += '<div class="rec-card">';
             html += '<span class="rec-icon">' + rec.icon + '</span>';
             html += '<div class="rec-info">';
-            html += '<span class="rec-name">' + (isZh ? rec.name : rec.nameEn) + '</span>';
-            html += '<p class="rec-desc">' + (isZh ? rec.desc : rec.descEn) + '</p>';
+            html += '<span class="rec-name">' + (isEn ? rec.nameEn : (rec.nameTw || rec.name)) + '</span>';
+            html += '<p class="rec-desc">' + (isEn ? rec.descEn : (rec.descTw || rec.desc)) + '</p>';
 
             // 使用方式选项
             if (rec.usageOptions && rec.usageOptions.length > 0) {
                 html += '<div class="usage-options">';
-                html += '<span class="usage-label">' + (isZh ? '使用方式：' : 'Usage: ') + '</span>';
+                html += '<span class="usage-label">' + (isEn ? 'Usage: ' : '使用方式：') + '</span>';
                 rec.usageOptions.forEach(function(opt) {
                     html += '<div class="usage-option">';
-                    html += '<span class="usage-name">' + (isZh ? opt.name : opt.nameEn || opt.name) + '</span>';
-                    html += '<span class="usage-desc">' + (isZh ? opt.desc : opt.descEn || opt.desc) + '</span>';
+                    html += '<span class="usage-name">' + (isEn ? (opt.nameEn || opt.name) : (opt.nameTw || opt.name)) + '</span>';
+                    html += '<span class="usage-desc">' + (isEn ? (opt.descEn || opt.desc) : (opt.descTw || opt.desc)) + '</span>';
                     if (opt.detail) {
-                        html += '<span class="usage-detail">' + (isZh ? opt.detail : opt.detail) + '</span>';
+                        html += '<span class="usage-detail">' + opt.detail + '</span>';
                     }
                     html += '</div>';
                 });
@@ -1891,12 +2045,12 @@ function showMBTIResult() {
             // 一周模板
             if (rec.weeklyTemplate) {
                 html += '<div class="weekly-template">';
-                html += '<span class="weekly-label">' + (isZh ? rec.weeklyTemplate.title : rec.weeklyTemplate.titleEn) + '</span>';
+                html += '<span class="weekly-label">' + (isEn ? rec.weeklyTemplate.titleEn : rec.weeklyTemplate.title) + '</span>';
                 var days = rec.weeklyTemplate.days;
                 days.forEach(function(day) {
                     html += '<div class="weekly-day">';
-                    html += '<span class="day-name">' + (isZh ? day.day : day.dayEn || day.day) + '</span>';
-                    html += '<span class="day-task">' + (isZh ? day.task : day.taskEn || day.task) + '</span>';
+                    html += '<span class="day-name">' + (isEn ? (day.dayEn || day.day) : day.day) + '</span>';
+                    html += '<span class="day-task">' + (isEn ? (day.taskEn || day.task) : day.task) + '</span>';
                     html += '</div>';
                 });
                 if (rec.weeklyTemplate.tips) {
@@ -1914,15 +2068,15 @@ function showMBTIResult() {
     // ===== Tips =====
     html += '<div class="mbti-tip-box">';
     html += '<span class="tip-icon">💡</span>';
-    html += '<p>' + type.tips + '</p>';
+    html += '<p>' + (isEn ? (type.tipsEn || type.tips) : (type.tipsTw || type.tips)) + '</p>';
     html += '</div>';
 
     // ===== 人格底色推荐 (Plus维度) =====
     var colorRecommendation = getColorRecommendation(mbtiAnswers);
     if (colorRecommendation) {
         html += '<div class="mbti-color-box">';
-        html += '<h4>' + (isZh ? '✨ 你的人格底色' : '✨ Your Personality Color') + '</h4>';
-        html += '<p class="color-reason">' + (isZh ? colorRecommendation.reason : colorRecommendation.reasonEn) + '</p>';
+        html += '<h4>' + (isEn ? '✨ Your Personality Color' : '✨ 你的人格底色') + '</h4>';
+        html += '<p class="color-reason">' + (isEn ? colorRecommendation.reasonEn : colorRecommendation.reason) + '</p>';
         html += '<div class="color-palette-preview">';
         colorRecommendation.palette.colors.forEach(function(color) {
             html += '<div class="color-preview-block" style="background-color: ' + color.hex + '" title="' + color.name + '">';
@@ -1930,14 +2084,14 @@ function showMBTIResult() {
             html += '</div>';
         });
         html += '</div>';
-        html += '<p class="color-palette-name">' + (isZh ? colorRecommendation.palette.name : colorRecommendation.palette.nameEn) + '</p>';
-        html += '<p class="color-tip">' + (isZh ? '点击调色盘工具可以复制颜色代码' : 'Click palette tool to copy color codes') + '</p>';
+        html += '<p class="color-palette-name">' + (isEn ? (colorRecommendation.palette.nameEn || colorRecommendation.palette.name) : colorRecommendation.palette.name) + '</p>';
+        html += '<p class="color-tip">' + (isEn ? 'Click palette tool to copy color codes' : '点击调色盘工具可以复制颜色代码') + '</p>';
         html += '</div>';
     }
 
     // ===== 重新测试 =====
     html += '<div class="mbti-result-actions">';
-    html += '<button class="btn btn-secondary" onclick="restartMBTITest()">' + (isZh ? '重新测试' : 'Restart') + '</button>';
+    html += '<button class="btn btn-secondary" onclick="restartMBTITest()">' + (isEn ? 'Restart' : '重新测试') + '</button>';
     html += '</div>';
 
     resultContainer.innerHTML = html;
@@ -1961,6 +2115,267 @@ function restartMBTITest() {
 }
 
 // 获取颜色推荐（基于Plus维度的答案）
+// ============================================
+// Color Wheel Tool
+// ============================================
+var currentWheelScheme = 'complementary';
+var wheelBaseColor = '#7a6b8a';
+
+function initColorWheel() {
+    var baseColorInput = document.getElementById('wheelBaseColor');
+    var hexDisplay = document.getElementById('wheelHexDisplay');
+    var schemeTabs = document.getElementById('schemeTabs');
+    var presetGrid = document.getElementById('presetPaletteGrid');
+    var paletteFilter = document.getElementById('paletteFilter');
+
+    if (!baseColorInput) return;
+
+    // Initialize
+    updateColorWheel();
+
+    // Color picker change
+    baseColorInput.addEventListener('input', function() {
+        wheelBaseColor = this.value;
+        hexDisplay.textContent = wheelBaseColor.toUpperCase();
+        updateColorWheel();
+    });
+
+    // Scheme tabs
+    if (schemeTabs) {
+        schemeTabs.querySelectorAll('.scheme-tab').forEach(function(tab) {
+            tab.addEventListener('click', function() {
+                currentWheelScheme = this.dataset.scheme;
+                schemeTabs.querySelectorAll('.scheme-tab').forEach(function(t) { t.classList.remove('active'); });
+                this.classList.add('active');
+                updateColorWheel();
+            });
+        });
+    }
+
+    // Initialize preset palettes
+    initPresetPalettes();
+}
+
+function updateColorWheel() {
+    var wheelCenter = document.getElementById('wheelCenter');
+    var wheelRing = document.getElementById('wheelRing');
+    var schemeInfo = document.getElementById('schemeInfo');
+
+    if (!wheelCenter || !wheelRing) return;
+
+    // Set center color
+    wheelCenter.style.backgroundColor = wheelBaseColor;
+    wheelCenter.setAttribute('data-hex', wheelBaseColor.toUpperCase());
+
+    // Get colors based on scheme
+    var colors = generatePaletteFromBase(wheelBaseColor, getSchemeType());
+    var schemeDescriptions = getSchemeDescriptions();
+
+    // Clear existing dots
+    wheelRing.innerHTML = '';
+
+    // Calculate positions for each color
+    colors.forEach(function(color, index) {
+        if (index === 0) return; // Skip base color (it's in center)
+
+        var angle = getColorAngle(index, colors.length, currentWheelScheme);
+        var radius = 115; // Distance from center
+        var dotSize = 50;
+
+        // Calculate position (center of wheel is 140px from edge)
+        var x = 140 + radius * Math.cos(angle * Math.PI / 180) - dotSize / 2;
+        var y = 140 + radius * Math.sin(angle * Math.PI / 180) - dotSize / 2;
+
+        var dot = document.createElement('div');
+        dot.className = 'wheel-color-dot';
+        dot.style.backgroundColor = color.hex;
+        dot.style.left = x + 'px';
+        dot.style.top = y + 'px';
+        dot.setAttribute('data-hex', color.hex.toUpperCase());
+        dot.setAttribute('title', color.name);
+
+        dot.addEventListener('click', function() {
+            copyColorToClipboard(color.hex);
+        });
+
+        wheelRing.appendChild(dot);
+    });
+
+    // Center click handler
+    wheelCenter.addEventListener('click', function() {
+        copyColorToClipboard(wheelBaseColor);
+    });
+
+    // Update scheme info
+    if (schemeInfo) {
+        var info = schemeDescriptions[currentWheelScheme];
+        schemeInfo.querySelector('.scheme-name').textContent = info.name;
+        schemeInfo.querySelector('.scheme-desc').textContent = info.desc;
+    }
+}
+
+function getSchemeType() {
+    var schemeMap = {
+        'complementary': 'complementary',
+        'analogous': 'analogous',
+        'triadic': 'triadic',
+        'split': 'splitComplementary',
+        'tetradic': 'tetradic',
+        'mono': 'monochromatic'
+    };
+    return schemeMap[currentWheelScheme] || 'complementary';
+}
+
+function getSchemeDescriptions() {
+    return {
+        'complementary': { name: '互补色方案', desc: '色相相对180°，对比强烈，视觉冲击' },
+        'analogous': { name: '邻近色方案', desc: '色相相邻±30°，和谐自然，过渡柔和' },
+        'triadic': { name: '三角色方案', desc: '色相三等分120°，平衡丰富，活力感' },
+        'split': { name: '分裂互补方案', desc: '互补色两侧±30°，对比柔和，更易搭配' },
+        'tetradic': { name: '四角色方案', desc: '色相四等分90°，变化丰富，需注意平衡' },
+        'mono': { name: '同色系方案', desc: '同一色相不同明度，简洁统一，层次分明' }
+    };
+}
+
+function getColorAngle(index, total, scheme) {
+    // Base color is at angle 0 (but we skip it)
+    // Other colors positioned based on scheme type
+    switch (scheme) {
+        case 'complementary':
+            return 180;
+        case 'analogous':
+            if (index === 1) return -30;
+            if (index === 2) return 30;
+            if (index === 3) return 0; // Light version
+            return 0;
+        case 'triadic':
+            if (index === 1) return 120;
+            if (index === 2) return 240;
+            if (index === 3) return 0;
+            return index * 120;
+        case 'split':
+            if (index === 1) return 150;
+            if (index === 2) return 210;
+            if (index === 3) return 0;
+            return 150 + (index - 1) * 60;
+        case 'tetradic':
+            return index * 90;
+        case 'mono':
+            // Arrange in a small arc
+            return -30 + index * 20;
+        default:
+            return index * 60;
+    }
+}
+
+function copyColorToClipboard(hex) {
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(hex).then(function() {
+            showCopyTooltip('已复制 ' + hex);
+        });
+    } else {
+        var textarea = document.createElement('textarea');
+        textarea.value = hex;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+        showCopyTooltip('已复制 ' + hex);
+    }
+}
+
+function showCopyTooltip(message) {
+    var tooltip = document.querySelector('.copy-tooltip');
+    if (!tooltip) {
+        tooltip = document.createElement('div');
+        tooltip.className = 'copy-tooltip';
+        document.body.appendChild(tooltip);
+    }
+    tooltip.textContent = message;
+    tooltip.classList.add('show');
+    setTimeout(function() {
+        tooltip.classList.remove('show');
+    }, 1500);
+}
+
+function initPresetPalettes() {
+    var presetGrid = document.getElementById('presetPaletteGrid');
+    var paletteFilter = document.getElementById('paletteFilter');
+
+    if (!presetGrid || !presetPalettes) return;
+
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+    var allText = isEn ? 'All' : (isTw ? '全部' : '全部');
+
+    // Build filter buttons
+    var filterHtml = '<button class="filter-btn active" data-category="all">' + allText + '</button>';
+    styleCategories.forEach(function(cat) {
+        filterHtml += '<button class="filter-btn" data-category="' + cat.name + '">' + cat.icon + ' ' + (isEn ? (cat.nameEn || cat.name) : (isTw ? (cat.nameTw || cat.name) : cat.name)) + '</button>';
+    });
+    paletteFilter.innerHTML = filterHtml;
+
+    // Filter click handlers
+    paletteFilter.querySelectorAll('.filter-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+            paletteFilter.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
+            this.classList.add('active');
+            renderPresetPaletteMiniCards(this.dataset.category);
+        });
+    });
+
+    // Initial render
+    renderPresetPaletteMiniCards('all');
+}
+
+function renderPresetPaletteMiniCards(category) {
+    var presetGrid = document.getElementById('presetPaletteGrid');
+    if (!presetGrid) return;
+
+    var isEn = currentLang === 'en';
+    var isTw = currentLang === 'tw';
+
+    var filtered = presetPalettes;
+    if (category !== 'all') {
+        filtered = presetPalettes.filter(function(p) { return p.category === category; });
+    }
+
+    var html = '';
+    filtered.forEach(function(palette) {
+        html += '<div class="palette-mini-card" data-palette="' + palette.name + '">';
+        html += '<div class="palette-mini-name">' + (isEn ? (palette.nameEn || palette.name) : (isTw ? (palette.nameTw || palette.name) : palette.name)) + '</div>';
+        html += '<div class="palette-mini-colors">';
+        palette.colors.forEach(function(color) {
+            html += '<div class="palette-mini-color" style="background-color: ' + color.hex + '" data-hex="' + color.hex + '"></div>';
+        });
+        html += '</div>';
+        html += '</div>';
+    });
+    presetGrid.innerHTML = html;
+
+    // Click to copy
+    presetGrid.querySelectorAll('.palette-mini-color').forEach(function(colorDot) {
+        colorDot.addEventListener('click', function(e) {
+            e.stopPropagation();
+            copyColorToClipboard(this.dataset.hex);
+        });
+    });
+
+    // Click card to set as base color
+    presetGrid.querySelectorAll('.palette-mini-card').forEach(function(card) {
+        card.addEventListener('click', function() {
+            var paletteName = this.dataset.palette;
+            var palette = presetPalettes.find(function(p) { return p.name === paletteName; });
+            if (palette && palette.colors[0]) {
+                wheelBaseColor = palette.colors[0].hex;
+                document.getElementById('wheelBaseColor').value = wheelBaseColor;
+                document.getElementById('wheelHexDisplay').textContent = wheelBaseColor.toUpperCase();
+                updateColorWheel();
+            }
+        });
+    });
+}
+
 function getColorRecommendation(answers) {
     // 只分析Plus维度的问题（id: 25, 26, 27）
     var colorAnswers = answers.filter(function(a) {
@@ -2335,10 +2750,38 @@ function renderElements() {
     container.querySelectorAll('.element-item').forEach(function(item) {
         item.addEventListener('click', function() {
             copyToClipboard(this.textContent);
-            showNotification(currentLang === 'zh' ? '已复制!' : 'Copied!');
+            showNotification(currentLang === 'en' ? 'Copied!' : (currentLang === 'tw' ? '已複製!' : '已复制!'));
         });
     });
 }
+
+// ============================================
+// Download Templates
+// ============================================
+function downloadTemplate(type) {
+    // Template URLs - you can replace these with actual PDF URLs
+    var templates = {
+        monthly: 'templates/monthly-template.pdf',
+        weekly: 'templates/weekly-template.pdf',
+        habit: 'templates/habit-tracker.pdf',
+        timeline: 'templates/timeline-template.pdf'
+    };
+
+    var url = templates[type];
+
+    // For now, show a message since actual files don't exist
+    // In production, replace with actual download logic
+    showNotification(currentLang === 'en' ? 'Template download coming soon!' : (currentLang === 'tw' ? '模板下載功能即將上線！' : '模板下载功能即将上线！'));
+
+    // Uncomment below when actual PDF files are available:
+    // var link = document.createElement('a');
+    // link.href = url;
+    // link.download = type + '-template.pdf';
+    // link.click();
+}
+
+// Make it global for onclick
+window.downloadTemplate = downloadTemplate;
 
 // ============================================
 // Gallery Section
@@ -2428,3 +2871,20 @@ function toggleCollapsible(header) {
 
 // Global function for onclick
 window.toggleCollapsible = toggleCollapsible;
+
+// ============================================
+// Animal Selection
+// ============================================
+function selectAnimal(type) {
+    var mainCard = document.getElementById('mainAnimalCard');
+    var altCard = document.getElementById('altAnimalCard');
+
+    if (type === 'main') {
+        if (mainCard) mainCard.classList.add('selected');
+        if (altCard) altCard.classList.remove('selected');
+    } else {
+        if (mainCard) mainCard.classList.remove('selected');
+        if (altCard) altCard.classList.add('selected');
+    }
+}
+window.selectAnimal = selectAnimal;

@@ -6,6 +6,7 @@ var translations = {
     zh: {
         // Navigation
         logo: "Sophie手帐",
+        "nav.colors": "配色灵感",
         "nav.mbti": "手帐人格",
         "nav.planner": "手帐设计",
         "nav.track": "今日打卡",
@@ -70,27 +71,21 @@ var translations = {
         "about.story3": "后来我才明白：不是我不适合做手帐，是我一直在用不适合我的方式做手帐。",
         "about.story4": "现在我帮助和我一样的人——注意力容易分散的人、不喜欢被规则束缚的人——找到属于自己的记录方式。不是强迫自己变成自律的J人，而是用自己的方式，记录属于自己的时间。",
 
-        // Planner Wizard - 8 Steps
+        // Planner Wizard
         "planner.label": "~ 找到你的风格 ~",
         "planner.title": "手帐风格测试",
         "planner.subtitle": "几个问题，帮你找到适合的方式",
-
-        // Step 1: Background
         "planner.q1Title": "你是谁？",
         "planner.bgStudent": "学生",
         "planner.bgWorker": "上班族",
         "planner.bgParent": "宝妈/家长",
         "planner.bgFreelancer": "自由职业",
-
-        // Step 2: J vs P
         "planner.q2pjTitle": "你是J还是P？",
         "planner.q2pjHint": "MBTI性格类型中的判断维度",
         "planner.jType": "J型（判断型）",
         "planner.jTypeDesc": "喜欢计划、按规则执行、享受规律",
         "planner.pType": "P型（感知型）",
         "planner.pTypeDesc": "喜欢灵活、随性而行、不喜被束缚",
-
-        // Step 3: ADHD Level
         "planner.q3adhdTitle": "你的注意力特点？",
         "planner.q3adhdHint": "ADD/ADHD倾向自评",
         "planner.adhdNone": "无明显倾向",
@@ -99,8 +94,6 @@ var translations = {
         "planner.adhdMildDesc": "偶尔分心、忘记任务、时间感模糊",
         "planner.adhdSignificant": "明显倾向",
         "planner.adhdSignificantDesc": "经常分心/超聚焦、时间感很模糊",
-
-        // Step 4: Goals
         "planner.q4Title": "你想用手帐做什么？",
         "planner.q4Hint": "可多选",
         "planner.goalTasks": "管理任务",
@@ -108,15 +101,11 @@ var translations = {
         "planner.goalHabits": "追踪习惯",
         "planner.goalFeelings": "记录感受",
         "planner.goalReading": "读书/观影记录",
-
-        // Step 5: Paper vs Digital
         "planner.q5Title": "纸质还是数字？",
         "planner.mediumPaper": "纸质手帐",
         "planner.mediumPaperDesc": "手写触感、实体收藏、可自由排版",
         "planner.mediumDigital": "数字手帐",
         "planner.mediumDigitalDesc": "随时记录、方便修改、多设备同步",
-
-        // Step 6: Flexibility
         "planner.q6Title": "计划会经常改变吗？",
         "planner.q6Hint": "灵活性程度",
         "planner.flexNever": "基本不变",
@@ -128,15 +117,11 @@ var translations = {
         "planner.flexVeryFrequent": "经常大变",
         "planner.flexVeryFrequentDesc": "计划几乎没法提前定，随性为主",
         "planner.flexVeryFrequentTip": "💡 这种情况建议手机App",
-
-        // Step 7: Layout
         "planner.q7Title": "排版偏好？",
         "planner.layoutCompact": "紧凑型",
         "planner.layoutCompactDesc": "一页多内容、信息密集、实用",
         "planner.layoutSpacious": "宽松型",
         "planner.layoutSpaciousDesc": "留白多、可装饰、美观",
-
-        // Step 8: Multi-record
         "planner.q8Title": "同时记录几件事？",
         "planner.q8Hint": "一天内想记录的内容数量",
         "planner.multiOne": "一件事",
@@ -154,8 +139,6 @@ var translations = {
         "planner.getHelp": "需要帮助？联系我",
         "planner.prev": "← 上一步",
         "planner.next": "下一步 →",
-
-        // Result Profile
         "planner.yourProfile": "你的特点",
         "planner.recommendedTypes": "推荐类型",
         "planner.variant": "推荐变体",
@@ -165,101 +148,14 @@ var translations = {
         "planner.highFlexTip": "计划变化很频繁：推荐活页本或手机App，方便随时调整",
         "planner.paperFlexConflict": "纸质偏好但计划变化频繁：考虑活页本，或纸质+手机App组合",
 
-        // Type Matching Reasons
-        "match.pType": "适合P型灵活风格",
-        "match.jType": "适合J型计划风格",
-        "match.adhdFriendly": "ADHD友好型",
-        "match.highFlex": "高度灵活可调整",
-        "match.flexFriendly": "灵活性友好",
-        "match.paperType": "适合纸质记录",
-        "match.digitalType": "适合数字记录",
-        "match.goal_tasks": "适合任务管理",
-        "match.goal_time": "适合时间记录",
-        "match.goal_habits": "适合习惯追踪",
-        "match.goal_feelings": "适合感受记录",
-        "match.goal_reading": "适合阅读记录",
-
-        // Type Variants
-        "type.timeline.daily": "一页一天（美观版）",
-        "type.timeline.dailyDesc": "适合喜欢美观排版的P型，可自由装饰",
-        "type.timeline.weekly": "一周两页（实用版）",
-        "type.timeline.weeklyDesc": "适合信息密集型，一周时间一目了然",
-        "type.timeline.name": "Timeline时间轴",
-        "type.timeline.desc": "记录一天的时间分布",
-        "type.todo.name": "To-do清单",
-        "type.todo.desc": "任务管理，可记录感受",
-        "type.todo.note": "可单独用，也可和其他组合",
-        "type.todo.weekly1": "周计划（宽松版）",
-        "type.todo.weekly1Desc": "一页一周，留白多，可记录感受",
-        "type.todo.weekly2": "周计划（紧凑版）",
-        "type.todo.weekly2Desc": "一页两周，信息密集",
-        "type.monthly.name": "月历",
-        "type.monthly.desc": "习惯追踪、读书记录、每日图",
-        "type.monthly.full": "两页一月完整版",
-        "type.monthly.fullDesc": "习惯追踪+读书记录+每日图",
-        "type.monthly.strip": "月历小条",
-        "type.monthly.stripDesc": "可贴在其他页面，节省空间",
-        "type.monthly.block": "月历方块",
-        "type.monthly.blockDesc": "每日一格，简洁实用",
-        "type.fiveyear.name": "五年日记",
-        "type.fiveyear.desc": "每天记录一点点",
-        "type.looseleaf.name": "活页本",
-        "type.looseleaf.desc": "高度灵活，随意组合",
-        "type.app.name": "手机App",
-        "type.app.desc": "数字化手帐，多玩法",
-        "type.app.tip": "日历/待办/笔记App组合使用",
-        "type.app.calendar": "日历App",
-        "type.app.todo": "待办App",
-        "type.app.note": "笔记App",
-
-        // Calendar Section
+        // Calendar
         "calendar.label": "~ 打卡日历 ~",
         "calendar.title": "手帐打卡",
         "calendar.subtitle": "点击日期标记",
         "calendar.days": "天",
         "calendar.streak": "连续",
 
-        // Resources Section
-        "resources.label": "~ 素材库 ~",
-        "resources.title": "素材下载",
-        "resources.subtitle": "免费模板与语录",
-        "resources.templates": "模板",
-        "resources.quotes": "语录",
-        "resources.elements": "小元素",
-        "resources.monthly": "月历",
-        "resources.weekly": "周计划",
-        "resources.habit": "打卡",
-        "resources.timeline": "Timeline",
-        "resources.download": "下载",
-        "resources.randomQuote": "换一批",
-
-        // Gallery Section
-        "gallery.label": "~ 作品墙 ~",
-        "gallery.title": "手帐作品",
-        "gallery.subtitle": "分享你的手帐",
-        "gallery.upload": "上传作品",
-        "gallery.empty": "还没有作品",
-
-        // Challenge Section
-        "challenge.label": "~ 主题挑战 ~",
-        "challenge.title": "每月主题",
-        "challenge.subtitle": "跟随主题，激发灵感",
-        "challenge.themeApril": "四月：记录感恩",
-        "challenge.descApril": "每天写下一件感恩的事",
-        "challenge.ideas": "灵感提示",
-        "challenge.past": "过往主题",
-
-        // MBTI Test Section
-        "mbti.label": "~ 手帐人格测试 ~",
-        "mbti.title": "发现你的手帐人格",
-        "mbti.subtitle": "15道题，测出最适合你的手帐方式",
-        "mbti.prev": "← 上一题",
-        "mbti.next": "下一题 →",
-        "mbti.restart": "重新测试",
-        "mbti.seeResult": "查看结果",
-        "mbti.selectFirst": "请先选择一个答案",
-
-        // Layout Section
+        // Layout
         "layout.label": "~ 排版技巧 ~",
         "layout.title": "手帐排版基础",
         "layout.subtitle": "简单的排版理论，让你的手帐更好看",
@@ -277,46 +173,7 @@ var translations = {
         "layout.colors.desc": "一页手帐<strong>不超过3种颜色</strong>。太多颜色会显得杂乱，反而不好看。",
         "layout.mainTip": "最重要的：<strong>排版是为了让内容更容易阅读</strong>，不是为了好看而已。如果不确定，就保持简洁！",
 
-        // Colors Section
-        "colors.label": "~ 配色灵感 ~",
-        "colors.title": "手帐配色工具",
-        "colors.subtitle": "找到属于你的配色风格",
-        "colors.generatorTitle": "配色生成器",
-        "colors.generatorDesc": "选择一个主色，自动生成搭配色",
-        "colors.pickColor": "选择主色：",
-        "colors.generate": "生成配色",
-        "colors.presetsTitle": "预设配色方案",
-        "colors.copied": "已复制！",
-
-        // Blog
-        "blog.label": "~ 分享 ~",
-        "blog.title": "我的手帐分享",
-        "blog.subtitle": "手帐排版、灵感、日常记录",
-        "blog.followXhs": "小红书关注我",
-        "blog.uploadTitle": "分享你的手帐",
-        "blog.uploadDesc": "上传你的手帐页面",
-        "blog.uploadPlaceholder": "点击或拖拽上传图片",
-        "blog.viewOnXhs": "小红书",
-        "blog.cat1": "Timeline排版",
-        "blog.post1Title": "自制Timeline分享",
-        "blog.cat2": "月历设计",
-        "blog.post2Title": "月历+习惯追踪组合",
-        "blog.cat3": "App推荐",
-        "blog.post3Title": "手机手帐App玩法",
-
-        // Help Section
-        "help.label": "~ 手帐求助 ~",
-        "help.title": "遇到问题？我来帮你",
-        "help.subtitle": "上传你的手帐页面，描述你的困惑，我会人工回复",
-        "help.badge": "人工回复",
-        "help.uploadLabel": "上传你的手帐图片：",
-        "help.uploadPlaceholder": "点击或拖拽上传图片",
-        "help.problemLabel": "你遇到的问题或困惑：",
-        "help.emailLabel": "你的邮箱（用于回复）：",
-        "help.submit": "提交求助",
-        "help.note": "💡 我会在1-3天内通过邮件回复你",
-
-        // Q&A Section
+        // Q&A
         "qa.label": "~ 问答专区 ~",
         "qa.title": "常见问题解答",
         "qa.subtitle": "新手常见疑问，帮你快速上手手帐",
@@ -325,8 +182,6 @@ var translations = {
         "contact.label": "~ 联系我 ~",
         "contact.title": "一起探索手帐",
         "contact.intro": "想定制专属手帐系统？有问题想聊？欢迎联系我。",
-        "contact.xhs": "@Sophie手帐",
-        "contact.email": "your@email.com",
         "contact.formName": "名字",
         "contact.formEmail": "邮箱",
         "contact.formMessage": "想说的话",
@@ -337,9 +192,199 @@ var translations = {
         "footer.copyright": "Sophie手帐 · since 2024"
     },
 
+    tw: {
+        // Navigation
+        logo: "Sophie手帳",
+        "nav.colors": "配色靈感",
+        "nav.mbti": "手帳人格",
+        "nav.planner": "手帳設計",
+        "nav.track": "今日打卡",
+        "nav.resources": "設計思路",
+        "nav.learn": "了解ADHD",
+        "nav.about": "我的故事",
+        "nav.qa": "常見問題",
+
+        // Hero
+        "hero.greeting": "你好，我是",
+        "hero.subtitle": "手帳不是自律J人的專屬<br>ADHD和P人也可以做好手帳",
+        "hero.mbtiBtn": "測測你的手帳人格",
+        "hero.plannerBtn": "設計適合你的手帳",
+        "hero.tracking": "今日打卡",
+        "hero.resourcesBtn": "設計思路",
+        "hero.learnMore": "了解ADHD",
+        "hero.aboutBtn": "我的故事",
+        "hero.scroll": "向下",
+
+        // Track Section
+        "track.label": "~ 打卡 & 主題 ~",
+        "track.title": "記錄你的手帳旅程",
+        "track.themeName": "四月：記錄感恩",
+        "track.themeDesc": "每天寫下一件讓你感恩的事",
+
+        // Resources
+        "resources.label": "~ 素材庫 ~",
+        "resources.title": "設計思路",
+        "resources.subtitle": "免費模板與語錄",
+        "resources.colors": "配色靈感",
+        "resources.layout": "排版技巧",
+        "resources.designIdeas": "設計思路",
+        "resources.materials": "素材下載",
+
+        // Color Quiz
+        "color.quizTitle": "你喜歡什麼風格的顏色？",
+        "color.stylesTitle": "經典藝術風格色系",
+
+        // Modal
+        "modal.tab.adhd": "ADD/ADHD",
+        "modal.tab.infp": "INFP",
+        "modal.adhd.title": "什麼是ADD/ADHD？",
+        "modal.adhd.intro": "ADD/ADHD不是缺陷，而是大腦運作方式不同。",
+        "modal.adhd.item1": "注意力容易分散，但也可能超聚焦",
+        "modal.adhd.item2": "時間感模糊，忘記做了什麼、要做什麼",
+        "modal.adhd.item3": "傳統計劃方式常常失效",
+        "modal.adhd.tip": "<strong>手帳可以是你的錨點：</strong>記錄讓你看到時間是怎麼過的，不需要完美執行計劃。",
+        "modal.infp.title": "什麼是INFP？",
+        "modal.infp.intro": "INFP是MBTI中的一種人格類型，代表內向、直覺、情感、感知。",
+        "modal.infp.item1": "追求意義和真實性",
+        "modal.infp.item2": "內心世界豐富",
+        "modal.infp.item3": "不喜歡被規則束縛（P類型）",
+        "modal.infp.tip": "<strong>P vs J：</strong>J人喜歡計劃，P人喜歡靈活。作為P人，與其強迫自己計劃，不如用記錄來了解自己。",
+
+        // About
+        "about.label": "~ 關於我 ~",
+        "about.title": "我的故事",
+        "about.photoPlaceholder": "你的照片",
+        "about.intro": "我是 Sophie，一個曾經覺得自己做不好手帳的人。",
+        "about.story1": "最早開始做手帳的時候，我發現自己總是堅持不下來——經常忘記要做什麼，也忘了做了什麼，日期對我來來說總是模糊的。",
+        "about.story2": "我試過各種計劃表、打卡本，但每次都是寫了幾天就放棄。我以為是我不夠自律，不夠堅持。",
+        "about.story3": "後來我才明白：不是我不適合做手帳，是我一直在用不適合我的方式做手帳。",
+        "about.story4": "現在我幫助和我一樣的人——注意力容易分散的人、不喜歡被規則束縛的人——找到屬於自己的記錄方式。不是強迫自己變成自律的J人，而是用自己的方式，記錄屬於自己的時間。",
+
+        // Planner Wizard
+        "planner.label": "~ 找到你的風格 ~",
+        "planner.title": "手帳風格測試",
+        "planner.subtitle": "幾個問題，幫你找到適合的方式",
+        "planner.q1Title": "你是誰？",
+        "planner.bgStudent": "學生",
+        "planner.bgWorker": "上班族",
+        "planner.bgParent": "寶媽/家長",
+        "planner.bgFreelancer": "自由職業",
+        "planner.q2pjTitle": "你是J還是P？",
+        "planner.q2pjHint": "MBTI性格類型中的判斷維度",
+        "planner.jType": "J型（判斷型）",
+        "planner.jTypeDesc": "喜歡計劃、按規則執行、享受規律",
+        "planner.pType": "P型（感知型）",
+        "planner.pTypeDesc": "喜歡靈活、隨性而行、不喜被束縛",
+        "planner.q3adhdTitle": "你的注意力特點？",
+        "planner.q3adhdHint": "ADD/ADHD傾向自評",
+        "planner.adhdNone": "無明顯傾向",
+        "planner.adhdNoneDesc": "注意力較穩定，計劃能正常執行",
+        "planner.adhdMild": "輕微傾向",
+        "planner.adhdMildDesc": "偶爾分心、忘記任務、時間感模糊",
+        "planner.adhdSignificant": "明顯傾向",
+        "planner.adhdSignificantDesc": "經常分心/超聚焦、時間感很模糊",
+        "planner.q4Title": "你想用手帳做什麼？",
+        "planner.q4Hint": "可多選",
+        "planner.goalTasks": "管理任務",
+        "planner.goalTime": "記錄時間",
+        "planner.goalHabits": "追蹤習慣",
+        "planner.goalFeelings": "記錄感受",
+        "planner.goalReading": "讀書/觀影記錄",
+        "planner.q5Title": "紙質還是數位？",
+        "planner.mediumPaper": "紙質手帳",
+        "planner.mediumPaperDesc": "手寫觸感、實體收藏、可自由排版",
+        "planner.mediumDigital": "數位手帳",
+        "planner.mediumDigitalDesc": "隨時記錄、方便修改、多設備同步",
+        "planner.q6Title": "計劃會經常改變嗎？",
+        "planner.q6Hint": "靈活性程度",
+        "planner.flexNever": "基本不變",
+        "planner.flexNeverDesc": "計劃制定後基本能按計劃執行",
+        "planner.flexOccasional": "偶爾小變",
+        "planner.flexOccasionalDesc": "計劃有時需要微調",
+        "planner.flexFrequent": "常有小變",
+        "planner.flexFrequentDesc": "計劃經常會調整，但大方向不變",
+        "planner.flexVeryFrequent": "經常大變",
+        "planner.flexVeryFrequentDesc": "計劃幾乎沒法提前定，隨性為主",
+        "planner.flexVeryFrequentTip": "💡 這種情況建議手機App",
+        "planner.q7Title": "排版偏好？",
+        "planner.layoutCompact": "緊湊型",
+        "planner.layoutCompactDesc": "一頁多內容、信息密集、實用",
+        "planner.layoutSpacious": "寬鬆型",
+        "planner.layoutSpaciousDesc": "留白多、可裝飾、美觀",
+        "planner.q8Title": "同時記錄幾件事？",
+        "planner.q8Hint": "一天內想記錄的內容數量",
+        "planner.multiOne": "一件事",
+        "planner.multiOneDesc": "專注記錄最重要的事",
+        "planner.multiFew": "幾件事",
+        "planner.multiFewDesc": "2-5件事，常見情況",
+        "planner.multiMany": "很多事",
+        "planner.multiManyDesc": "喜歡記錄每件小事和細節",
+
+        // Result
+        "planner.recommended": "推薦",
+        "planner.resultTitle": "適合你的手帳類型",
+        "planner.resultNote": "💡 你可以組合2-3種類型使用\n截圖和圖片可以自己添加到相應位置",
+        "planner.restart": "重新測試",
+        "planner.getHelp": "需要幫助？聯繫我",
+        "planner.prev": "← 上一步",
+        "planner.next": "下一步 →",
+        "planner.yourProfile": "你的特點",
+        "planner.recommendedTypes": "推薦類型",
+        "planner.variant": "推薦變體",
+        "planner.combinations": "組合建議",
+        "planner.multiGoalTip": "你的目標較多，可以組合使用多種類型",
+        "planner.pAdhdTip": "P型+ADHD：建議以記錄為主，計劃為輔。先用Timeline觀察時間，再慢慢加入To-do",
+        "planner.highFlexTip": "計劃變化很頻繁：推薦活頁本或手機App，方便隨時調整",
+        "planner.paperFlexConflict": "紙質偏好但計劃變化頻繁：考慮活頁本，或紙質+手機App組合",
+
+        // Calendar
+        "calendar.label": "~ 打卡日曆 ~",
+        "calendar.title": "手帳打卡",
+        "calendar.subtitle": "點擊日期標記",
+        "calendar.days": "天",
+        "calendar.streak": "連續",
+
+        // Layout
+        "layout.label": "~ 排版技巧 ~",
+        "layout.title": "手帳排版基礎",
+        "layout.subtitle": "簡單的排版理論，讓你的手帳更好看",
+        "layout.whitespace.title": "留白原則",
+        "layout.whitespace.desc": "頁面至少要有<strong>30%的空白</strong>，不要填滿每一寸空間。留白讓頁面呼吸，更容易閱讀。",
+        "layout.alignment.title": "對齊原則",
+        "layout.alignment.desc": "選擇一種對齊方式並<strong>保持一致</strong>。可以全左對齊、全居中，但不要混用。",
+        "layout.hierarchy.title": "視覺層次",
+        "layout.hierarchy.desc": "標題<strong>大且醒目</strong>，正文<strong>適中</strong>，註釋<strong>小且輕</strong>。讓讀者一眼看到重點。",
+        "layout.proportion.title": "圖文比例",
+        "layout.proportion.desc": "圖片和裝飾元素<strong>不超過40%</strong>面積。文字才是手帳的核心，不要被圖片淹沒。",
+        "layout.repetition.title": "重複元素",
+        "layout.repetition.desc": "用<strong>相同的裝飾元素</strong>（如小星星、圓點）作為標記，讓整本手帳更有整體感。",
+        "layout.colors.title": "顏色數量",
+        "layout.colors.desc": "一頁手帳<strong>不超過3種顏色</strong>。太多顏色會顯得雜亂，反而不好看。",
+        "layout.mainTip": "最重要的：<strong>排版是為了讓內容更容易閱讀</strong>，不是為了好看而已。如果不確定，就保持簡潔！",
+
+        // Q&A
+        "qa.label": "~ 問答專區 ~",
+        "qa.title": "常見問題解答",
+        "qa.subtitle": "新手常見疑問，幫你快速上手手帳",
+
+        // Contact
+        "contact.label": "~ 聯繫我 ~",
+        "contact.title": "一起探索手帳",
+        "contact.intro": "想定製專屬手帳系統？有問題想聊？歡迎聯繫我。",
+        "contact.formName": "名字",
+        "contact.formEmail": "郵箱",
+        "contact.formMessage": "想說的話",
+        "contact.formSubmit": "發送",
+
+        // Footer
+        "footer.tagline": "Sophie手帳 ~ 為創意心灵而設計",
+        "footer.copyright": "Sophie手帳 · since 2024"
+    },
+
     en: {
         // Navigation
         logo: "Sophie Planner",
+        "nav.colors": "Color Palette",
         "nav.mbti": "Journal MBTI",
         "nav.planner": "Design Quiz",
         "nav.track": "Check-in",
@@ -404,27 +449,21 @@ var translations = {
         "about.story3": "Later I realized: it wasn't that I wasn't suited for journaling, it was that I was using methods that didn't suit me.",
         "about.story4": "Now I help people like me - those whose attention wanders, those who don't like being bound by rules - find their own way to record. Not forcing ourselves to become disciplined J-types, but using our own way to record our own time.",
 
-        // Planner Wizard - 8 Steps
+        // Planner Wizard
         "planner.label": "~ Find Your Style ~",
         "planner.title": "Planner Style Quiz",
         "planner.subtitle": "A few questions to find your style",
-
-        // Step 1: Background
         "planner.q1Title": "Who are you?",
         "planner.bgStudent": "Student",
         "planner.bgWorker": "Office Worker",
         "planner.bgParent": "Parent",
         "planner.bgFreelancer": "Freelancer",
-
-        // Step 2: J vs P
         "planner.q2pjTitle": "Are you J or P?",
         "planner.q2pjHint": "MBTI Judging vs Perceiving dimension",
         "planner.jType": "J Type (Judging)",
         "planner.jTypeDesc": "Like planning, follow rules, enjoy routine",
         "planner.pType": "P Type (Perceiving)",
         "planner.pTypeDesc": "Like flexibility, spontaneous, dislike constraints",
-
-        // Step 3: ADHD Level
         "planner.q3adhdTitle": "Your attention style?",
         "planner.q3adhdHint": "ADD/ADHD tendency self-assessment",
         "planner.adhdNone": "No significant tendency",
@@ -433,8 +472,6 @@ var translations = {
         "planner.adhdMildDesc": "Occasionally distracted, forget tasks, fuzzy time sense",
         "planner.adhdSignificant": "Significant tendency",
         "planner.adhdSignificantDesc": "Often distracted/hyperfocused, very fuzzy time sense",
-
-        // Step 4: Goals
         "planner.q4Title": "What do you want to track?",
         "planner.q4Hint": "Multi-select",
         "planner.goalTasks": "Manage Tasks",
@@ -442,15 +479,11 @@ var translations = {
         "planner.goalHabits": "Track Habits",
         "planner.goalFeelings": "Record Feelings",
         "planner.goalReading": "Reading/Movie Log",
-
-        // Step 5: Paper vs Digital
         "planner.q5Title": "Paper or Digital?",
         "planner.mediumPaper": "Paper Planner",
         "planner.mediumPaperDesc": "Handwriting feel, physical collection, free layout",
         "planner.mediumDigital": "Digital Planner",
         "planner.mediumDigitalDesc": "Record anytime, easy to modify, sync across devices",
-
-        // Step 6: Flexibility
         "planner.q6Title": "Do plans change often?",
         "planner.q6Hint": "Flexibility level",
         "planner.flexNever": "Rarely changes",
@@ -462,15 +495,11 @@ var translations = {
         "planner.flexVeryFrequent": "Often major changes",
         "planner.flexVeryFrequentDesc": "Plans can't be made ahead, mostly spontaneous",
         "planner.flexVeryFrequentTip": "💡 Phone App recommended for this",
-
-        // Step 7: Layout
         "planner.q7Title": "Layout preference?",
         "planner.layoutCompact": "Compact",
         "planner.layoutCompactDesc": "More content per page, dense, practical",
         "planner.layoutSpacious": "Spacious",
         "planner.layoutSpaciousDesc": "More whitespace, can decorate, beautiful",
-
-        // Step 8: Multi-record
         "planner.q8Title": "How many things to record?",
         "planner.q8Hint": "Number of items to track per day",
         "planner.multiOne": "One thing",
@@ -488,8 +517,6 @@ var translations = {
         "planner.getHelp": "Need Help? Contact Me",
         "planner.prev": "← Back",
         "planner.next": "Next →",
-
-        // Result Profile
         "planner.yourProfile": "Your Profile",
         "planner.recommendedTypes": "Recommended Types",
         "planner.variant": "Recommended Variant",
@@ -499,121 +526,14 @@ var translations = {
         "planner.highFlexTip": "Plans change often: Loose-leaf or Phone App for easy adjustment",
         "planner.paperFlexConflict": "Paper preference + frequent changes: Consider loose-leaf or paper + app combo",
 
-        // Type Matching Reasons
-        "match.pType": "Suitable for P type flexibility",
-        "match.jType": "Suitable for J type planning",
-        "match.adhdFriendly": "ADHD-friendly",
-        "match.highFlex": "Highly flexible & adjustable",
-        "match.flexFriendly": "Flexibility-friendly",
-        "match.paperType": "Suitable for paper",
-        "match.digitalType": "Suitable for digital",
-        "match.goal_tasks": "Suitable for task management",
-        "match.goal_time": "Suitable for time tracking",
-        "match.goal_habits": "Suitable for habit tracking",
-        "match.goal_feelings": "Suitable for recording feelings",
-        "match.goal_reading": "Suitable for reading log",
-
-        // Type Variants
-        "type.timeline.daily": "1 Page/Day (Aesthetic)",
-        "type.timeline.dailyDesc": "For P types who like beautiful layouts, can decorate",
-        "type.timeline.weekly": "2 Pages/Week (Practical)",
-        "type.timeline.weeklyDesc": "Dense info, one week at a glance",
-        "type.timeline.name": "Timeline",
-        "type.timeline.desc": "Track time distribution",
-        "type.todo.name": "To-do List",
-        "type.todo.desc": "Task management, can record feelings",
-        "type.todo.note": "Can use alone or combine with others",
-        "type.todo.weekly1": "Weekly Plan (Spacious)",
-        "type.todo.weekly1Desc": "1 page/week, more whitespace, can record feelings",
-        "type.todo.weekly2": "Weekly Plan (Compact)",
-        "type.todo.weekly2Desc": "2 weeks per page, dense info",
-        "type.monthly.name": "Monthly Calendar",
-        "type.monthly.desc": "Habit tracking, reading log, daily photos",
-        "type.monthly.full": "Full 2-Page Monthly",
-        "type.monthly.fullDesc": "Habit tracker + reading log + daily photos",
-        "type.monthly.strip": "Monthly Strip",
-        "type.monthly.stripDesc": "Can stick on other pages, saves space",
-        "type.monthly.block": "Monthly Block",
-        "type.monthly.blockDesc": "One block per day, clean and practical",
-        "type.fiveyear.name": "5-Year Journal",
-        "type.fiveyear.desc": "Record a little each day",
-        "type.looseleaf.name": "Loose-leaf Binder",
-        "type.looseleaf.desc": "High flexibility, combine freely",
-        "type.app.name": "Phone App",
-        "type.app.desc": "Digital planner, many options",
-        "type.app.tip": "Combine calendar/todo/note apps",
-        "type.app.calendar": "Calendar App",
-        "type.app.todo": "Todo App",
-        "type.app.note": "Note App",
-
-        // Types
-        "type.timeline.name": "Timeline",
-        "type.timeline.desc": "Track time distribution",
-        "type.timeline.tip": "1 page/day = beautiful | 2 pages/week = practical",
-        "type.todo.name": "To-do List",
-        "type.todo.desc": "Task management, can record feelings",
-        "type.todo.tip": "Can use alone or combine with others",
-        "type.monthly.name": "Monthly Calendar",
-        "type.monthly.desc": "Habit tracking, reading log, daily photos",
-        "type.monthly.tip": "2 pages/month | Small strips can add to other pages",
-        "type.fiveyear.name": "5-Year Journal",
-        "type.fiveyear.desc": "Record a little each day",
-        "type.fiveyear.tip": "Good for J types who like routine",
-        "type.looseleaf.name": "Loose-leaf Binder",
-        "type.looseleaf.desc": "High flexibility, combine freely",
-        "type.looseleaf.tip": "Good for people with no planning tendency",
-        "type.app.name": "Phone App",
-        "type.app.desc": "Digital planner, many options",
-        "type.app.tip": "Combine calendar/todo/note apps",
-
-        // Calendar Section
+        // Calendar
         "calendar.label": "~ Track ~",
         "calendar.title": "Journal Tracker",
         "calendar.subtitle": "Click to mark days",
         "calendar.days": "days",
         "calendar.streak": "streak",
 
-        // Resources Section
-        "resources.label": "~ Resources ~",
-        "resources.title": "Downloads",
-        "resources.subtitle": "Free templates & quotes",
-        "resources.templates": "Templates",
-        "resources.quotes": "Quotes",
-        "resources.elements": "Elements",
-        "resources.monthly": "Monthly",
-        "resources.weekly": "Weekly",
-        "resources.habit": "Habit",
-        "resources.timeline": "Timeline",
-        "resources.download": "Download",
-        "resources.randomQuote": "Shuffle",
-
-        // Gallery Section
-        "gallery.label": "~ Gallery ~",
-        "gallery.title": "Journal Gallery",
-        "gallery.subtitle": "Share your journals",
-        "gallery.upload": "Upload",
-        "gallery.empty": "No entries yet",
-
-        // Challenge Section
-        "challenge.label": "~ Challenge ~",
-        "challenge.title": "Monthly Theme",
-        "challenge.subtitle": "Follow themes for inspiration",
-        "challenge.themeApril": "April: Gratitude",
-        "challenge.descApril": "Write one thing you're grateful for each day",
-        "challenge.ideas": "Ideas",
-        "challenge.past": "Past themes",
-
-        // MBTI Test Section
-        "mbti.label": "~ Journal Personality Test ~",
-        "mbti.title": "Discover Your Journal Personality",
-        "mbti.subtitle": "15 questions to find your perfect journal style",
-        "mbti.prev": "← Previous",
-        "mbti.next": "Next →",
-        "mbti.restart": "Restart",
-        "mbti.seeResult": "See Result",
-        "mbti.selectFirst": "Please select an answer first",
-
-        // Layout Section
+        // Layout
         "layout.label": "~ Layout Tips ~",
         "layout.title": "Basic Layout Techniques",
         "layout.subtitle": "Simple theory to make your journal look better",
@@ -631,46 +551,7 @@ var translations = {
         "layout.colors.desc": "Use <strong>no more than 3 colors</strong> per page. Too many colors look messy.",
         "layout.mainTip": "Most important: <strong>Layout makes content easier to read</strong>, not just prettier. If unsure, keep it simple!",
 
-        // Colors Section
-        "colors.label": "~ Color Inspiration ~",
-        "colors.title": "Journal Color Tool",
-        "colors.subtitle": "Find your color style",
-        "colors.generatorTitle": "Color Generator",
-        "colors.generatorDesc": "Pick a base color to generate matching colors",
-        "colors.pickColor": "Pick base color:",
-        "colors.generate": "Generate",
-        "colors.presetsTitle": "Preset Palettes",
-        "colors.copied": "Copied!",
-
-        // Blog
-        "blog.label": "~ Gallery ~",
-        "blog.title": "My Journaling Gallery",
-        "blog.subtitle": "Layouts, inspirations, daily records",
-        "blog.followXhs": "Follow on Xiaohongshu",
-        "blog.uploadTitle": "Share Your Journal",
-        "blog.uploadDesc": "Upload your journal pages",
-        "blog.uploadPlaceholder": "Click or drag to upload",
-        "blog.viewOnXhs": "Xiaohongshu",
-        "blog.cat1": "Timeline Layout",
-        "blog.post1Title": "My Custom Timeline",
-        "blog.cat2": "Monthly Design",
-        "blog.post2Title": "Monthly + Habit Tracker",
-        "blog.cat3": "App Recommendations",
-        "blog.post3Title": "Digital Planner Apps",
-
-        // Help Section
-        "help.label": "~ Get Help ~",
-        "help.title": "Questions? Let Me Help",
-        "help.subtitle": "Upload your journal page, describe your problem, I will reply personally",
-        "help.badge": "Personal Reply",
-        "help.uploadLabel": "Upload your journal image:",
-        "help.uploadPlaceholder": "Click or drag to upload",
-        "help.problemLabel": "Your problem or confusion:",
-        "help.emailLabel": "Your email (for reply):",
-        "help.submit": "Submit",
-        "help.note": "💡 I will reply within 1-3 days via email",
-
-        // Q&A Section
+        // Q&A
         "qa.label": "~ Q&A ~",
         "qa.title": "Frequently Asked Questions",
         "qa.subtitle": "Common questions to help you start journaling",
@@ -679,8 +560,6 @@ var translations = {
         "contact.label": "~ Contact ~",
         "contact.title": "Let's Explore Together",
         "contact.intro": "Want a custom planner system? Questions? Contact me.",
-        "contact.xhs": "@SophiePlanner",
-        "contact.email": "your@email.com",
         "contact.formName": "Name",
         "contact.formEmail": "Email",
         "contact.formMessage": "Message",
