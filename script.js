@@ -1875,7 +1875,7 @@ function showMBTIResult() {
     if (fill) fill.style.width = '100%';
 
     var isEn = currentLang === 'en';
-    var isZhOrTw = currentLang === 'zh' || currentLang === 'tw';
+    var isTw = currentLang === 'tw';
     var type = result.type;
     var tendencies = result.tendencies;
     var animal = type.animal;
