@@ -17,7 +17,7 @@ var translations = {
 
         // Hero
         "hero.greeting": "你好，我是",
-        "hero.subtitle": "手帐不是自律J人的专属<br>ADHD和P人也可以做好手帐",
+        "hero.subtitle": "手帐是记录生活的方式<br>每个人都可以找到适合自己的记录风格",
         "hero.mbtiBtn": "测测你的手帐人格",
         "hero.plannerBtn": "设计适合你的手帐",
         "hero.tracking": "今日打卡",
@@ -47,19 +47,19 @@ var translations = {
 
         // Modal
         "modal.tab.adhd": "ADD/ADHD",
-        "modal.tab.infp": "INFP",
+        "modal.tab.infp": "P型人格",
         "modal.adhd.title": "什么是ADD/ADHD？",
         "modal.adhd.intro": "ADD/ADHD不是缺陷，而是大脑运作方式不同。",
         "modal.adhd.item1": "注意力容易分散，但也可能超聚焦",
         "modal.adhd.item2": "时间感模糊，忘记做了什么、要做什么",
         "modal.adhd.item3": "传统计划方式常常失效",
         "modal.adhd.tip": "<strong>手帐可以是你的锚点：</strong>记录让你看到时间是怎么过的，不需要完美执行计划。",
-        "modal.infp.title": "什么是INFP？",
-        "modal.infp.intro": "INFP是MBTI中的一种人格类型，代表内向、直觉、情感、感知。",
+        "modal.infp.title": "什么是P型人格？",
+        "modal.infp.intro": "P型（感知型）是MBTI中的一种偏好，代表灵活、随性、适应性强。",
         "modal.infp.item1": "追求意义和真实性",
         "modal.infp.item2": "内心世界丰富",
-        "modal.infp.item3": "不喜欢被规则束缚（P类型）",
-        "modal.infp.tip": "<strong>P vs J：</strong>J人喜欢计划，P人喜欢灵活。作为P人，与其强迫自己计划，不如用记录来了解自己。",
+        "modal.infp.item3": "不喜欢被规则束缚",
+        "modal.infp.tip": "<strong>P型特质：</strong>P型人喜欢灵活，与其强迫自己计划，不如用记录来了解自己。",
 
         // About
         "about.label": "~ 关于我 ~",
@@ -69,7 +69,7 @@ var translations = {
         "about.story1": "最早开始做手帐的时候，我发现自己总是坚持不下来——经常忘记要做什么，也忘了做了什么，日期对我来说总是模糊的。",
         "about.story2": "我试过各种计划表、打卡本，但每次都是写了几天就放弃。我以为是我不够自律，不够坚持。",
         "about.story3": "后来我才明白：不是我不适合做手帐，是我一直在用不适合我的方式做手帐。",
-        "about.story4": "现在我帮助和我一样的人——注意力容易分散的人、不喜欢被规则束缚的人——找到属于自己的记录方式。不是强迫自己变成自律的J人，而是用自己的方式，记录属于自己的时间。",
+        "about.story4": "现在我帮助和我一样的人——注意力容易分散的人、不喜欢被规则束缚的人——找到属于自己的记录方式。用自己的风格，记录属于自己的时间。",
 
         // Planner Wizard
         "planner.label": "~ 找到你的风格 ~",
@@ -206,7 +206,7 @@ var translations = {
 
         // Hero
         "hero.greeting": "你好，我是",
-        "hero.subtitle": "手帳不是自律J人的專屬<br>ADHD和P人也可以做好手帳",
+        "hero.subtitle": "手帳是記錄生活的方式<br>每個人都可以找到適合自己的記錄風格",
         "hero.mbtiBtn": "測測你的手帳人格",
         "hero.plannerBtn": "設計適合你的手帳",
         "hero.tracking": "今日打卡",
@@ -236,19 +236,19 @@ var translations = {
 
         // Modal
         "modal.tab.adhd": "ADD/ADHD",
-        "modal.tab.infp": "INFP",
+        "modal.tab.infp": "P型人格",
         "modal.adhd.title": "什麼是ADD/ADHD？",
         "modal.adhd.intro": "ADD/ADHD不是缺陷，而是大腦運作方式不同。",
         "modal.adhd.item1": "注意力容易分散，但也可能超聚焦",
         "modal.adhd.item2": "時間感模糊，忘記做了什麼、要做什麼",
         "modal.adhd.item3": "傳統計劃方式常常失效",
         "modal.adhd.tip": "<strong>手帳可以是你的錨點：</strong>記錄讓你看到時間是怎麼過的，不需要完美執行計劃。",
-        "modal.infp.title": "什麼是INFP？",
-        "modal.infp.intro": "INFP是MBTI中的一種人格類型，代表內向、直覺、情感、感知。",
+        "modal.infp.title": "什麼是P型人格？",
+        "modal.infp.intro": "P型（感知型）是MBTI中的一種偏好，代表靈活、隨性、適應性強。",
         "modal.infp.item1": "追求意義和真實性",
         "modal.infp.item2": "內心世界豐富",
-        "modal.infp.item3": "不喜歡被規則束縛（P類型）",
-        "modal.infp.tip": "<strong>P vs J：</strong>J人喜歡計劃，P人喜歡靈活。作為P人，與其強迫自己計劃，不如用記錄來了解自己。",
+        "modal.infp.item3": "不喜歡被規則束縛",
+        "modal.infp.tip": "<strong>P型特質：</strong>P型人喜歡靈活，與其強迫自己計劃，不如用記錄來了解自己。",
 
         // About
         "about.label": "~ 關於我 ~",
@@ -258,7 +258,7 @@ var translations = {
         "about.story1": "最早開始做手帳的時候，我發現自己總是堅持不下來——經常忘記要做什麼，也忘了做了什麼，日期對我來來說總是模糊的。",
         "about.story2": "我試過各種計劃表、打卡本，但每次都是寫了幾天就放棄。我以為是我不夠自律，不夠堅持。",
         "about.story3": "後來我才明白：不是我不適合做手帳，是我一直在用不適合我的方式做手帳。",
-        "about.story4": "現在我幫助和我一樣的人——注意力容易分散的人、不喜歡被規則束縛的人——找到屬於自己的記錄方式。不是強迫自己變成自律的J人，而是用自己的方式，記錄屬於自己的時間。",
+        "about.story4": "現在我幫助和我一樣的人——注意力容易分散的人、不喜歡被規則束縛的人——找到屬於自己的記錄方式。用自己的風格，記錄屬於自己的時間。",
 
         // Planner Wizard
         "planner.label": "~ 找到你的風格 ~",
@@ -395,7 +395,7 @@ var translations = {
 
         // Hero
         "hero.greeting": "Hi, I'm",
-        "hero.subtitle": "Journaling isn't just for organized J-types<br>ADHD and P-types can journal too",
+        "hero.subtitle": "Journaling is a way to record life<br>Everyone can find their own journaling style",
         "hero.mbtiBtn": "Test Your Journal Personality",
         "hero.plannerBtn": "Design Your Journal",
         "hero.tracking": "Today's Check-in",
@@ -425,19 +425,19 @@ var translations = {
 
         // Modal
         "modal.tab.adhd": "ADD/ADHD",
-        "modal.tab.infp": "INFP",
+        "modal.tab.infp": "P-Type",
         "modal.adhd.title": "What is ADD/ADHD?",
         "modal.adhd.intro": "ADD/ADHD is not a defect, just a different way the brain works.",
         "modal.adhd.item1": "Easily distracted, but can also hyperfocus",
         "modal.adhd.item2": "Time sense is fuzzy, forget what to do and what was done",
         "modal.adhd.item3": "Traditional planning often fails",
         "modal.adhd.tip": "<strong>Planner can be your anchor:</strong> Recording lets you see how time passed, without needing perfect execution.",
-        "modal.infp.title": "What is INFP?",
-        "modal.infp.intro": "INFP is a personality type in MBTI - Introverted, Intuitive, Feeling, Perceiving.",
+        "modal.infp.title": "What is P-Type?",
+        "modal.infp.intro": "P-Type (Perceiving) is a preference in MBTI, representing flexibility, spontaneity, and adaptability.",
         "modal.infp.item1": "Seek meaning and authenticity",
         "modal.infp.item2": "Rich inner world",
-        "modal.infp.item3": "Don't like being bound by rules (P type)",
-        "modal.infp.tip": "<strong>P vs J:</strong> J types like planning, P types like flexibility. As a P, instead of forcing yourself to plan, use recording to understand yourself.",
+        "modal.infp.item3": "Don't like being bound by rules",
+        "modal.infp.tip": "<strong>P-Type Traits:</strong> P-types prefer flexibility. Instead of forcing yourself to plan, use recording to understand yourself.",
 
         // About
         "about.label": "~ About Me ~",
@@ -447,7 +447,7 @@ var translations = {
         "about.story1": "When I first started journaling, I couldn't keep it up - I often forgot what to do and what I had done. Dates were always fuzzy to me.",
         "about.story2": "I tried various planners and trackers, but I'd give up after a few days each time. I thought I wasn't disciplined enough, not persistent enough.",
         "about.story3": "Later I realized: it wasn't that I wasn't suited for journaling, it was that I was using methods that didn't suit me.",
-        "about.story4": "Now I help people like me - those whose attention wanders, those who don't like being bound by rules - find their own way to record. Not forcing ourselves to become disciplined J-types, but using our own way to record our own time.",
+        "about.story4": "Now I help people like me - those whose attention wanders, those who don't like being bound by rules - find their own way to record. Using our own style to record our own time.",
 
         // Planner Wizard
         "planner.label": "~ Find Your Style ~",
